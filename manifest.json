@@ -1,5 +1,5 @@
 {
-    "name": "SharedUpgrades__",
+    "name": "SharedUpgradesPlus",
     "version_number": "1.0.0",
     "website_url": "https://github.com/VirtualPixel/SharedUpgrades",
     "description": "Host-only shared upgrades for R.E.P.O. with configurable chance-based sharing, late join sync, and modded upgrade support. Alternative to SharedUpgrades and BetterTeamUpgrades.",
