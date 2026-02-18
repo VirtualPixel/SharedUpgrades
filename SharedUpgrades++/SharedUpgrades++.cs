@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace SharedUpgrades__
 {
-    [BepInPlugin("Vippy.SharedUpgradesPlus", "SharedUpgradesPlus", "1.0.0")]
+    [BepInPlugin("Vippy.SharedUpgradesPlus", "SharedUpgradesPlus", BuildInfo.Version)]
     public class SharedUpgrades__ : BaseUnityPlugin
     {
         internal static SharedUpgrades__ Instance { get; private set; } = null!;
-        internal new static ManualLogSource Logger => Instance._logger;
-        private ManualLogSource _logger => base.Logger;
+        internal new static ManualLogSource Logger => Instance.BaseLogger;
+        private ManualLogSource BaseLogger => base.Logger;
         internal Harmony? Harmony { get; set; }
 
         private void Awake()

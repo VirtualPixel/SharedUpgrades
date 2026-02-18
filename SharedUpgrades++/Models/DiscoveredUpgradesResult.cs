@@ -2,15 +2,9 @@
 
 namespace SharedUpgrades__.Models
 {
-    public sealed class DiscoveredUpgradesResult
+    public sealed class DiscoveredUpgradesResult(HashSet<string> vanilla, HashSet<string> modded)
     {
-        public HashSet<string> Vanilla { get; }
-        public HashSet<string> Modded { get; }
-
-        public DiscoveredUpgradesResult(HashSet<string> vanilla, HashSet<string> modded)
-        {
-            Vanilla = vanilla;
-            Modded = modded;
-        }
+        public HashSet<string> Vanilla { get; } = vanilla;
+        public HashSet<string> Modded { get; } = modded;
     }
 }

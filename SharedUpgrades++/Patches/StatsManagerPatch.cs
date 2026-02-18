@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SharedUpgrades__.Patches
 {
     [HarmonyPatch(typeof(StatsManager), "Start")]
-    public class StatsManagerPatch
+    internal class StatsManagerPatch
     {
         private static NetworkCallbackService? _callbackService;
 

@@ -8,7 +8,7 @@ using System.Reflection;
 namespace SharedUpgrades__.Patches
 {
     [HarmonyPatch(typeof(ItemUpgrade), "PlayerUpgrade")]
-    public class SharedUpgradesPatch
+    internal class SharedUpgradesPatch
     {
         private static readonly FieldInfo _itemToggle = AccessTools.Field(typeof(ItemUpgrade), "itemToggle");
         private static readonly FieldInfo _playerTogglePhotonId = AccessTools.Field(typeof(ItemToggle), "playerTogglePhotonID");
@@ -19,8 +19,8 @@ namespace SharedUpgrades__.Patches
         {
             viewID = 0;
 
-            ItemToggle? toggle = _itemToggle.GetValue(instance) as ItemToggle;
-            if (toggle is null || !toggle.toggleState) return null;
+            if (_itemToggle.GetValue(instance) is not ItemToggle { toggleState: true } toggle)
+                return null;
 
             viewID = (int)_playerTogglePhotonId.GetValue(toggle);
             return SemiFunc.PlayerAvatarGetFromPhotonID(viewID);

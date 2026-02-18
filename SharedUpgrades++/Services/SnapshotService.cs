@@ -8,7 +8,7 @@ namespace SharedUpgrades__.Services
         public static Dictionary<string, int> SnapshotPlayerStats(string steamID)
         {
             if (string.IsNullOrEmpty(steamID) || StatsManager.instance is null)
-                return new Dictionary<string, int>();
+                return [];
 
             return StatsManager.instance.dictionaryOfDictionaries
                 .Where(kvp => kvp.Key.StartsWith("playerUpgrade"))
@@ -17,7 +17,7 @@ namespace SharedUpgrades__.Services
 
         public static Dictionary<string, int> SnapshotTeamMaxLevels()
         {
-            Dictionary<string, int> result = new Dictionary<string, int>();
+            Dictionary<string, int> result = [];
             if (StatsManager.instance is null) return result;
 
             foreach (var kvp in StatsManager.instance.dictionaryOfDictionaries
