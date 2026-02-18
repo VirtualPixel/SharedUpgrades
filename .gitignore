@@ -1,9 +1,3 @@
-# Source code
-*.cs
-*.csproj
-*.sln
-*.slnx
-
 # Build output
 bin/
 obj/
