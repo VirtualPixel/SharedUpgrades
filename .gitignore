@@ -1,4 +1,5 @@
 # Build output
+BuildZip/
 bin/
 obj/
 *.dll
