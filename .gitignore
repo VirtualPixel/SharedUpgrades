@@ -18,15 +18,6 @@ obj/
 *.suo
 .idea/
 
-# AI / internal tooling
-.claude/
-*.jsonl
-memory/
-
-# Reference / research
-ReferenceCode/
-Reference/
-
 # BepInEx / game files
 plugins/
 patchers/
