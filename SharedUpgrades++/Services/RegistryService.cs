@@ -7,7 +7,7 @@ namespace SharedUpgrades__.Services
     {
         private static HashSet<string> vanillaKeys = null!;
         private static HashSet<string> moddedKeys = null!;
-        private static readonly RegistryService instance = new RegistryService();
+        private static readonly RegistryService instance = new();
 
         public static RegistryService Instance
         {
@@ -19,8 +19,8 @@ namespace SharedUpgrades__.Services
 
         private RegistryService()
         {
-            vanillaKeys = new HashSet<string>();
-            moddedKeys = new HashSet<string>();
+            vanillaKeys = [];
+            moddedKeys = [];
         }
 
         public void RegisterAll(DiscoveredUpgradesResult result)

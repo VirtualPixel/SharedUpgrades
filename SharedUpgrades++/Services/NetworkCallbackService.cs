@@ -18,7 +18,7 @@ namespace SharedUpgrades__.Services
         {
             try
             {
-                if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
+                if (!SemiFunc.IsMasterClient()) return;
                 var props = new ExitGames.Client.Photon.Hashtable { { WatermarkService.RoomKey, true } };
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
             }

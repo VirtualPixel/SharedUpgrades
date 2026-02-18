@@ -1,52 +1,98 @@
-using ExitGames.Client.Photon;
+using BepInEx;
 using HarmonyLib;
 using Photon.Pun;
 using System.Collections;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 
 namespace SharedUpgrades__.Services
 {
-    public class WatermarkService : MonoBehaviour
+    internal class WatermarkService : MonoBehaviour
     {
         internal const string RoomKey = "su__v1";
-        private const string OwnerID = "";
+        private static readonly string? OwnerID = LoadOwnerID();
+
+        private static string? LoadOwnerID()
+        {
+            try
+            {
+                var path = Path.Combine(Paths.ConfigPath, "SharedUpgrades++.owner");
+                if (!File.Exists(path)) return null;
+                return File.ReadAllText(path).Trim();
+            }
+            catch { return null; }
+        }
 
         private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
 
-        private bool show = false;
+        private bool show;
+        private bool polling;
+        private UnityEngine.Object? lastLevel;
+        private string? lastRoom;
         private GUIStyle? style;
 
-        private void Start()
+        private void Update()
         {
-            StartCoroutine(Poll());
+            if (RunManager.instance == null) return;
+            var current = RunManager.instance.levelCurrent;
+            var currentRoom = PhotonNetwork.CurrentRoom?.Name;
+
+            if (current == lastLevel && currentRoom == lastRoom) return;
+            lastLevel = current;
+            lastRoom = currentRoom;
+
+            if (current == RunManager.instance.levelLobbyMenu)
+            {
+                show = false;
+                if (!polling) StartCoroutine(Poll());
+            }
         }
 
         private IEnumerator Poll()
         {
-            while (true)
+            polling = true;
+            const float timeout = 10f;
+            const float interval = 1f;
+            float elapsed = 0f;
+
+            while (elapsed < timeout)
             {
+                yield return new WaitForSeconds(interval);
+                elapsed += interval;
+
                 try
                 {
-                    bool isOwner = false;
+                    if (!PhotonNetwork.InRoom) continue;
+                    if (string.IsNullOrEmpty(OwnerID)) break;
+
+                    PlayerAvatar? localPlayer = null;
                     foreach (var p in SemiFunc.PlayerGetAll())
                     {
                         if (p?.photonView != null && p.photonView.IsMine)
                         {
-                            isOwner = (string)_steamID.GetValue(p) == OwnerID;
+                            localPlayer = p;
                             break;
                         }
                     }
 
-                    bool modPresent = PhotonNetwork.InRoom &&
-                        PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomKey);
+                    if (localPlayer == null) continue;
+                    if ((string)_steamID.GetValue(localPlayer) != OwnerID) break;
 
-                    show = isOwner && modPresent;
+                    bool isHost = PhotonNetwork.IsMasterClient;
+                    bool modPresent = PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomKey);
+
+                    if (isHost || modPresent)
+                    {
+                        show = !isHost && modPresent;
+                        SharedUpgrades__.Logger.LogInfo($"[Watermark] isHost={isHost}, modPresent={modPresent}");
+                        break;
+                    }
                 }
                 catch { }
-
-                yield return new WaitForSeconds(3f);
             }
+
+            polling = false;
         }
 
         private void OnGUI()

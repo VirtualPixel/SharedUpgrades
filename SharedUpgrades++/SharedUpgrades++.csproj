@@ -5,7 +5,7 @@
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Vippy</Authors>
-    <Version>1.0.0</Version>
+    <Version>1.0.3</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputPath>C:\Users\wells\AppData\Roaming\Thunderstore Mod Manager\DataFolder\REPO\profiles\Development\BepInEx\plugins\SharedUpgradesPlus\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -21,6 +21,15 @@
     </RestoreAdditionalProjectSources>
     <RootNamespace>$(MSBuildProjectName.Replace("+", "_"))</RootNamespace>
   </PropertyGroup>
+
+  <!-- Build scripts -->
+  <Target Name="GenerateBuildInfo" BeforeTargets="BeforeBuild">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\prebuild.ps1&quot; -Version $(Version)" />
+  </Target>
+
+  <Target Name="PackageMod" AfterTargets="Build">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\postbuild.ps1&quot; -Version $(Version) -DllPath &quot;$(OutputPath)$(AssemblyName).dll&quot; -RepoRoot &quot;$(MSBuildProjectDirectory)\..&quot;" />
+  </Target>
 
   <!-- Package References -->
   <ItemGroup>
