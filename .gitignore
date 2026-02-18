@@ -1,0 +1,40 @@
+# Source code
+*.cs
+*.csproj
+*.sln
+*.slnx
+
+# Build output
+bin/
+obj/
+*.dll
+*.pdb
+*.nupkg
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+.idea/
+
+# AI / internal tooling
+.claude/
+*.jsonl
+memory/
+
+# Reference / research
+ReferenceCode/
+Reference/
+
+# BepInEx / game files
+plugins/
+patchers/
+BepInEx/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Packages
+packages/
