@@ -1,32 +1,40 @@
 # SharedUpgrades++
 
-Share upgrades with your whole team in R.E.P.O. — without breaking the fun.
+Share upgrades with your whole team in R.E.P.O.
 
-Full upgrade sharing is great, but it can make runs feel easy once the economy breaks down. SharedUpgrades++ adds a configurable chance system, so shared upgrades feel like a lucky bonus instead of a guaranteed handout. 100% for full sharing, 50% if you want it to feel earned, or anything in between.
-
----
-
-**Only the host needs it installed.**
+**HOST ONLY** — only the host needs this installed. Your friends play completely vanilla.
 
 ---
 
 ## Features
 
-- Any player buys an upgrade → configurable chance it gets shared with the team
-- Players who join mid-run get synced up automatically
-- Supports vanilla and modded upgrades out of the box
-- Automatically detects new upgrades — won't break on game updates
+- **Chance-based sharing** — set a % chance that each upgrade gets shared. 100% for full team sharing, lower if you want it to feel earned.
+- **Late join sync** — players joining mid-run receive the team's upgrades automatically
+- **Vanilla + modded upgrade support** — works with MoreUpgrades and other upgrade mods out of the box
+- **Auto-discovery** — detects new upgrades automatically, won't break when R.E.P.O. updates
 
 ## Config
 
-| | Default | |
+| Setting | Default | Description |
 |---|---|---|
-| Shared Upgrades | `true` | Turn the whole thing on or off |
-| Share Chance | `100` | % chance each upgrade gets shared with the team |
-| Late Join Sync | `true` | Sync upgrades when someone joins mid-run |
+| Shared Upgrades | `true` | Share upgrades when any player purchases one |
+| Share Chance | `100` | % chance each upgrade is shared with teammates |
+| Late Join Sync | `true` | Catch up players who join mid-run |
 | Late Join Chance | `100` | % chance each upgrade a late joiner receives |
-| Modded Upgrades | `true` | Include upgrades added by other mods |
+| Modded Upgrades | `true` | Include upgrades from other mods |
+
+Supports **REPOConfig** for live in-game config changes without restarting.
+
+## Looking for an alternative to SharedUpgrades or BetterTeamUpgrades?
+
+SharedUpgrades++ is a host-only replacement with everything you'd expect — plus a configurable chance system that keeps the economy from breaking down. Set Share Chance to 50-75% and runs stay challenging all the way through.
+
+## Roadmap
+
+- **Per-player sharing** — choose which players in your lobby receive shared upgrades
+- **ReturnToLobby compatibility** — full sync support when using mods that return to lobby between runs
+- **Built-in price scaling** — optional upgrade cost adjustments based on player count
 
 ---
 
-Found a bug or have a suggestion? [Open an issue](https://github.com/VirtualPixel/SharedUpgrades/issues).
+**Bugs or suggestions?** [Open an issue on GitHub](https://github.com/VirtualPixel/SharedUpgrades/issues)
