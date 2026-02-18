@@ -27,7 +27,7 @@ Supports **REPOConfig** for live in-game config changes without restarting.
 
 ## Standing on the shoulders of giants
 
-Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/) and [BetterTeamUpgrades](https://thunderstore.io/c/repo/p/MrBytesized/BetterTeamUpgrades/) showed the community what shared upgrades could be. SharedUpgrades++ builds on that foundation with a configurable chance system — so if you've ever wanted full team sharing without the economy going off the rails, this is the toggle you were looking for.
+Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/) and [BetterTeamUpgrades](https://thunderstore.io/c/repo/p/MrBytesized/BetterTeamUpgrades/) showed the community what shared upgrades could be. SharedUpgrades++ builds on that foundation.
 
 ## Roadmap
 
