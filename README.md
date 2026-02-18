@@ -25,9 +25,9 @@ Share upgrades with your whole team in R.E.P.O.
 
 Supports **REPOConfig** for live in-game config changes without restarting.
 
-## Looking for an alternative to SharedUpgrades or BetterTeamUpgrades?
+## Standing on the shoulders of giants
 
-SharedUpgrades++ is a host-only replacement with everything you'd expect — plus a configurable chance system that keeps the economy from breaking down. Set Share Chance to 50-75% and runs stay challenging all the way through.
+Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/) and [BetterTeamUpgrades](https://thunderstore.io/c/repo/p/MrBytesized/BetterTeamUpgrades/) showed the community what shared upgrades could be. SharedUpgrades++ builds on that foundation with a configurable chance system — so if you've ever wanted full team sharing without the economy going off the rails, this is the toggle you were looking for.
 
 ## Roadmap
 
