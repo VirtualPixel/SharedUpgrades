@@ -46,9 +46,9 @@ namespace SharedUpgrades__.Services
                 }
 
                 if (isVanilla)
-                    photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.Others, steamID, kvp.Key["playerUpgrade".Length..], difference);
+                    photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, kvp.Key["playerUpgrade".Length..], difference);
                 else
-                    photonView.RPC("UpdateStatRPC", RpcTarget.Others, kvp.Key, steamID, kvp.Value);
+                    photonView.RPC("UpdateStatRPC", RpcTarget.All, kvp.Key, steamID, kvp.Value);
             }
 
             SharedUpgrades__.Logger.LogInfo($"Late Join: Sync complete for {playerName}.");
