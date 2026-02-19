@@ -42,6 +42,7 @@ namespace SharedUpgrades__.Services
             lastLevel = current;
             lastRoom = currentRoom;
 
+            if (currentRoom == null) show = false;
             if (current == RunManager.instance.levelLobbyMenu)
             {
                 show = false;
@@ -85,8 +86,11 @@ namespace SharedUpgrades__.Services
                     if (isHost || modPresent)
                     {
                         show = !isHost && modPresent;
-                        SharedUpgrades__.Logger.LogInfo($"[Watermark] isHost={isHost}, modPresent={modPresent}");
+                        SharedUpgrades__.Logger.LogInfo($"[Watermark] Showing. isHost={isHost}, modPresent={modPresent}");
                         break;
+                    } else
+                    {
+                        SharedUpgrades__.Logger.LogInfo($"[Watermark] Not showing. isHost={isHost}, modPresent={modPresent}");
                     }
                 }
                 catch { }
@@ -102,10 +106,10 @@ namespace SharedUpgrades__.Services
             {
                 style ??= new GUIStyle(GUI.skin.label)
                 {
-                    fontSize = 9,
+                    fontSize = 24,
                     normal = { textColor = new Color(1f, 1f, 1f, 0.15f) }
                 };
-                GUI.Label(new Rect(6, Screen.height - 18, 40, 14), "S++", style);
+                GUI.Label(new Rect(6, Screen.height - 72, 160, 56), "S++", style);
             }
             catch { }
         }
