@@ -15,6 +15,7 @@ namespace SharedUpgrades__.Patches
             var discovered = DiscoveryService.DiscoveredUpgrades(__instance);
             RegistryService.Instance.Clear();
             RegistryService.Instance.RegisterAll(discovered);
+            ConfigService.LoadModsIntoConfig();
 
             if (_callbackService == null)
             {

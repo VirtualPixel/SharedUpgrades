@@ -30,6 +30,7 @@ namespace SharedUpgrades__.Services
                 bool isVanilla = RegistryService.Instance.IsVanilla(kvp.Key);
                 // If modded upgrade and modded upgrades are disabled, skip it
                 if (!isVanilla && !ConfigService.IsModdedUpgradesEnabled()) continue;
+                if (!ConfigService.IsUpgradeEnabled(kvp.Key)) continue;
 
                 int playerLevel = StatsManager.instance.dictionaryOfDictionaries
                     .TryGetValue(kvp.Key, out var upgradeDict)

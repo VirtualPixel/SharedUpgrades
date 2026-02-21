@@ -5,6 +5,8 @@ namespace SharedUpgrades__.Services
 {
     public sealed class RegistryService
     {
+        public IReadOnlyCollection<string> VanillaKeys => vanillaKeys;
+        public IReadOnlyCollection<string> ModdedKeys => moddedKeys;
         private static HashSet<string> vanillaKeys = null!;
         private static HashSet<string> moddedKeys = null!;
         private static readonly RegistryService instance = new();

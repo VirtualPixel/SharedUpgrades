@@ -9,9 +9,12 @@ namespace SharedUpgrades__.Configuration
         public static ConfigEntry<bool> EnableLateJoinSync = null!;
         public static ConfigEntry<int> LateJoinSyncChance = null!;
         public static ConfigEntry<bool> EnableModdedUpgrades = null!;
+        public static ConfigFile? ConfigFile;
 
         public static void Init(ConfigFile config)
         {
+            ConfigFile = config;
+
             EnableSharedUpgrades = config.Bind<bool>(
                 "Shared Upgrades",
                 "EnableSharedUpgrades",
