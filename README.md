@@ -33,7 +33,7 @@ Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgra
 
 - **Per-player sharing** — choose which players in your lobby receive shared upgrades
 - **ReturnToLobby compatibility** — full sync support when using mods that return to lobby between runs
-- **Built-in price scaling** — optional upgrade cost adjustments based on player count
+- **Per-upgrade share limits** — cap how many times a specific upgrade can be shared across the team
 
 ---
 
