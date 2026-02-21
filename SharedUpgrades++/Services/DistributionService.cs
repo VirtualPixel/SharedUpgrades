@@ -20,6 +20,11 @@ namespace SharedUpgrades__.Services
 
             bool isVanilla = RegistryService.Instance.IsVanilla(upgradeKey);
             if (!isVanilla && !ConfigService.IsModdedUpgradesEnabled()) return;
+            if (!ConfigService.IsUpgradeEnabled(upgradeKey))
+            {
+                SharedUpgrades__.Logger.LogInfo($"SharedUpgrades: {upgradeKey} is disabled in config, skipping distribution.");
+                return;
+            }
             string? upgradeSuffix = isVanilla ? upgradeKey["playerUpgrade".Length..] : null;
 
             foreach (PlayerAvatar player in SemiFunc.PlayerGetAll())

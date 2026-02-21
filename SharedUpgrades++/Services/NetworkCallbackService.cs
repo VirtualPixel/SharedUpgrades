@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace SharedUpgrades__.Services
         {
             try
             {
-                if (!SemiFunc.IsMasterClient()) return;
+                if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
                 var props = new ExitGames.Client.Photon.Hashtable { { WatermarkService.RoomKey, true } };
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
             }
