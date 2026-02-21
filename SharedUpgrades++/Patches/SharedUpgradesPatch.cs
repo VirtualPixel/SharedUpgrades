@@ -64,7 +64,7 @@ namespace SharedUpgrades__.Patches
 
                 if (currentValue <= previousValue) continue;
 
-                SharedUpgrades__.Logger.LogInfo($"SharedUpgrades: {__state.PlayerName} purchased {kvp.Key} (+{currentValue - previousValue}), distributing...");
+                SharedUpgrades__.Logger.LogInfo($"{__state.PlayerName} purchased {kvp.Key} (+{currentValue - previousValue}), distributing...");
 
                 DistributionService.DistributeUpgrade
                     (
