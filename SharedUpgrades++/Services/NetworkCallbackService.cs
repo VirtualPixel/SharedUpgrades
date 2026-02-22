@@ -15,6 +15,9 @@ namespace SharedUpgrades__.Services
     public class NetworkCallbackService : MonoBehaviourPunCallbacks
     {
         private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
+        private static readonly FieldInfo _tumble = AccessTools.Field(typeof(PlayerAvatar), "tumble");
+        private static readonly FieldInfo _physGrabber = AccessTools.Field(typeof(PlayerAvatar), "physGrabber");
+        private static readonly FieldInfo _playerHealth = AccessTools.Field(typeof(PlayerAvatar), "playerHealth");
         private readonly HashSet<Player> _pendingSync = new();
 
         public override void OnJoinedRoom()
@@ -110,7 +113,10 @@ namespace SharedUpgrades__.Services
                 if (avatar != null)
                     steamID = (string)_steamID.GetValue(avatar);
 
-                if (!string.IsNullOrEmpty(steamID))
+                if (!string.IsNullOrEmpty(steamID)
+                    && _tumble.GetValue(avatar) != null
+                    && _physGrabber.GetValue(avatar) != null
+                    && _playerHealth.GetValue(avatar) != null)
                     break;
             }
 
