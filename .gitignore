@@ -30,3 +30,6 @@ SharedUpgrades++.owner
 
 # Generated build info
 BuildInfo.g.cs
+
+# Local planning/scratch docs
+docs/
