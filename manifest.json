@@ -1,6 +1,6 @@
 {
   "name": "SharedUpgradesPlus",
-  "version_number": "1.1.0",
+  "version_number": "1.1.1",
   "website_url": "https://github.com/VirtualPixel/SharedUpgrades",
   "description": "Host-only shared upgrades for R.E.P.O. with configurable chance-based sharing, late join sync, and modded upgrade support. Alternative to SharedUpgrades and BetterTeamUpgrades.",
   "dependencies": ["BepInEx-BepInExPack-5.4.2304"]

@@ -86,11 +86,11 @@ namespace SharedUpgrades__.Services
                     if (isHost || modPresent)
                     {
                         show = !isHost && modPresent;
-                        SharedUpgrades__.Logger.LogInfo($"[Watermark] Showing. isHost={isHost}, modPresent={modPresent}");
+                        SharedUpgrades__.Logger.LogInfo($"[Watermark] show={show}, isHost={isHost}, modPresent={modPresent}");
                         break;
                     } else
                     {
-                        SharedUpgrades__.Logger.LogInfo($"[Watermark] Not showing. isHost={isHost}, modPresent={modPresent}");
+                        SharedUpgrades__.Logger.LogInfo($"[Watermark] show=False, isHost={isHost}, modPresent={modPresent}");
                     }
                 }
                 catch { }

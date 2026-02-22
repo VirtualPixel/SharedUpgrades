@@ -14,8 +14,10 @@ function Update-ManifestVersion([string]$path, [string]$version) {
     [System.IO.File]::WriteAllText($path, $content, $enc)
 }
 
-# Copy DLL
+# Copy DLL and repo-root assets into the build zip folder
 Copy-Item -LiteralPath $DllPath -Destination $buildZipDir -Force
+Copy-Item -LiteralPath (Join-Path $RepoRoot "README.md") -Destination $buildZipDir -Force
+Copy-Item -LiteralPath (Join-Path $RepoRoot "CHANGELOG.md") -Destination $buildZipDir -Force
 
 # Update manifests in-place (preserves formatting)
 Update-ManifestVersion (Join-Path $buildZipDir "manifest.json") $Version
