@@ -1,7 +1,7 @@
 ## 1.1.3
 
 - **New:** Upgrading health now heals other players
-- **New:** Visual effect for each player, just like the player who used the ugprade
+- **New:** Visual effect for each player, just like the player who used the upgrade
 - 
 
 ---
