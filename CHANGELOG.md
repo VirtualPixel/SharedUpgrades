@@ -1,3 +1,11 @@
+## 1.1.3
+
+- **New:** Upgrading health now heals other players
+- **New:** Visual effect for each player, just like the player who used the ugprade
+- 
+
+---
+
 ## 1.1.2
 
 - **Hotfix:** Late join sync with some upgrades not always working if not initialized yet
