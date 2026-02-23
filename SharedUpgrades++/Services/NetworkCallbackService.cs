@@ -120,7 +120,10 @@ namespace SharedUpgrades__.Services
                     break;
             }
 
-            if (avatar == null || string.IsNullOrEmpty(steamID))
+            if (avatar == null || string.IsNullOrEmpty(steamID)
+                || _tumble.GetValue(avatar) == null
+                || _physGrabber.GetValue(avatar) == null
+                || _playerHealth.GetValue(avatar) == null)
             {
                 SharedUpgrades__.Logger.LogWarning($"Late Join: Timed out waiting for {joiningPlayer.NickName}. Skipping.");
                 yield break;

@@ -1,3 +1,9 @@
+## 1.1.2
+
+- **Hotfix:** Late join sync with some upgrades not always working if not initialized yet
+
+---
+
 ## 1.1.1
 
 - **Fixed:** Late Join Sync when combined with return to lobby mods
