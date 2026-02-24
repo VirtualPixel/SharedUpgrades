@@ -18,6 +18,7 @@ function Update-ManifestVersion([string]$path, [string]$version) {
 Copy-Item -LiteralPath $DllPath -Destination $buildZipDir -Force
 Copy-Item -LiteralPath (Join-Path $RepoRoot "README.md") -Destination $buildZipDir -Force
 Copy-Item -LiteralPath (Join-Path $RepoRoot "CHANGELOG.md") -Destination $buildZipDir -Force
+Copy-Item -LiteralPath (Join-Path $RepoRoot "BuildZip\icon256.png") -Destination (Join-Path $buildZipDir "icon.png") -Force
 
 # Update manifests in-place (preserves formatting)
 Update-ManifestVersion (Join-Path $buildZipDir "manifest.json") $Version
