@@ -1,6 +1,7 @@
-## 1.1.5
+## 1.2.0
 
 - **New:** Share limiting! Limit how many times each upgrade can be shared with others. Default is infinite
+- **Fixed:** Late-join modded upgrade sync
 
 ---
 

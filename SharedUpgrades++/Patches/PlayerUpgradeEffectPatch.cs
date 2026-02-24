@@ -13,7 +13,7 @@ namespace SharedUpgrades__.Patches
             PlayerAvatar playerAvatar = SemiFunc.PlayerAvatarGetFromSteamID(_steamID);
             if (playerAvatar == null) 
             {
-                SharedUpgrades__.Logger.LogError($"TesterUpgradeCommandRPC(): PlayerAvatar not found on for steamID: {_steamID}");
+                SharedUpgrades__.Logger.LogError($"TesterUpgradeCommandRPC(): PlayerAvatar not found for steamID: {_steamID}");
                 return; 
             }
 
