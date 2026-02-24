@@ -8,7 +8,8 @@ Share upgrades with your whole team in R.E.P.O.
 
 ## Features
 
-- **Chance-based sharing** — set a % chance that each upgrade gets shared. 100% for full team sharing, lower if you want it to feel earned.
+- **Chance-based sharing** — set a % chance that each upgrade gets shared. 100% for full team sharing, lower if you want it to feel earned
+- **Shared Upgrade Limiting** — Set a total number of times individual upgrades can be distributed while not limiting how high one person can take a stat 
 - **Per-upgrade toggle** — enable or disable sharing individually for each upgrade type directly in the config file
 - **Late join sync** — players joining mid-run or between runs (with ReturnToLobby) receive the team's upgrades automatically
 - **Vanilla + modded upgrade support** — works with MoreUpgrades and other upgrade mods out of the box
@@ -33,7 +34,6 @@ Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgra
 ## Roadmap
 
 - **Per-player sharing** — choose which players in your lobby receive shared upgrades
-- **Per-upgrade share limits** — cap how many times a specific upgrade can be shared across the team
 
 ---
 

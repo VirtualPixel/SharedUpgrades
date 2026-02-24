@@ -1,14 +1,15 @@
 ﻿using SharedUpgrades__.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedUpgrades__.Services
 {
     public sealed class RegistryService
     {
-        public IReadOnlyCollection<string> VanillaKeys => vanillaKeys;
-        public IReadOnlyCollection<string> ModdedKeys => moddedKeys;
-        private static HashSet<string> vanillaKeys = null!;
-        private static HashSet<string> moddedKeys = null!;
+        public IReadOnlyCollection<Upgrade> VanillaUpgrades => vanillaUpgrades;
+        public IReadOnlyCollection<Upgrade> ModdedUpgrades => moddedUpgrades;
+        private static HashSet<Upgrade> vanillaUpgrades = null!;
+        private static HashSet<Upgrade> moddedUpgrades = null!;
         private static readonly RegistryService instance = new();
 
         public static RegistryService Instance
@@ -21,25 +22,37 @@ namespace SharedUpgrades__.Services
 
         private RegistryService()
         {
-            vanillaKeys = [];
-            moddedKeys = [];
+            vanillaUpgrades = [];
+            moddedUpgrades = [];
         }
 
         public void RegisterAll(DiscoveredUpgradesResult result)
         {
-            vanillaKeys.UnionWith(result.Vanilla);
-            moddedKeys.UnionWith(result.Modded);
-            SharedUpgrades__.Logger.LogInfo($"Discovered {vanillaKeys.Count} vanilla upgrades and {moddedKeys.Count} modded upgrades.");
+            vanillaUpgrades.UnionWith(result.Vanilla.Select(MakeUpgradeFromKey));
+            moddedUpgrades.UnionWith(result.Modded.Select(MakeUpgradeFromKey));
+            SharedUpgrades__.Logger.LogInfo($"Discovered {vanillaUpgrades.Count} vanilla upgrades and {moddedUpgrades.Count} modded upgrades.");
         }
         public void Clear()
         {
-            vanillaKeys.Clear();
-            moddedKeys.Clear();
+            vanillaUpgrades.Clear();
+            moddedUpgrades.Clear();
         }
 
         public bool IsVanilla(string key)
         {
-            return vanillaKeys.Contains(key);
+            return vanillaUpgrades
+                .Any(upgrade => upgrade.Name.Equals(key));
+        }
+
+        public bool IsRegistered(string key)
+        {
+            return IsVanilla(key)
+                || moddedUpgrades.Any(upgrade => upgrade.Name.Equals(key));
+        }
+
+        private Upgrade MakeUpgradeFromKey(string key)
+        {
+            return new Upgrade(Name: key);
         }
     }
 }

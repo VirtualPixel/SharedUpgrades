@@ -56,7 +56,7 @@ namespace SharedUpgrades__.Patches
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
             if (__state is null) return;
 
-            var playerUpgrades = StatsManager.instance.dictionaryOfDictionaries.Where(key => key.Key.StartsWith("playerUpgrade"));
+            var playerUpgrades = StatsManager.instance.dictionaryOfDictionaries.Where(key => RegistryService.Instance.IsRegistered(key.Key));
 
             foreach (KeyValuePair<string, Dictionary<string, int>> kvp in playerUpgrades)
             {
@@ -75,7 +75,7 @@ namespace SharedUpgrades__.Patches
                         currentValue: currentValue
                     );
 
-                if (kvp.Key == "playerUpgradeHealth")
+                if (new Upgrade(kvp.Key).CleanName == "Health")
                 {
                     PlayerAvatar buyer = SemiFunc.PlayerAvatarGetFromSteamID(__state.SteamID);
                     if (buyer != null && !buyer.isLocal)
