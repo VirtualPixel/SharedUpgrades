@@ -1,8 +1,6 @@
-using ExitGames.Client.Photon;
 using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +16,7 @@ namespace SharedUpgrades__.Services
         private static readonly FieldInfo _tumble = AccessTools.Field(typeof(PlayerAvatar), "tumble");
         private static readonly FieldInfo _physGrabber = AccessTools.Field(typeof(PlayerAvatar), "physGrabber");
         private static readonly FieldInfo _playerHealth = AccessTools.Field(typeof(PlayerAvatar), "playerHealth");
-        private readonly HashSet<Player> _pendingSync = new();
+        private readonly HashSet<Player> _pendingSync = [];
 
         public override void OnJoinedRoom()
         {

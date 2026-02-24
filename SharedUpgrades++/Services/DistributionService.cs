@@ -11,10 +11,11 @@ namespace SharedUpgrades__.Services
 
         public static void DistributeUpgrade(UpgradeContext context, string upgradeKey, int difference, int currentValue)
         {
+            int upgradeLimit = ConfigService.UpgradeShareLimit(upgradeKey);
             PhotonView photonView = PunManager.instance.GetComponent<PhotonView>();
             if (photonView == null)
             {
-                SharedUpgrades__.Logger.LogWarning("SharedUpgrades: PhotonView not found on PunManager.");
+                SharedUpgrades__.Logger.LogWarning("PhotonView not found on PunManager.");
                 return;
             }
 
@@ -22,30 +23,47 @@ namespace SharedUpgrades__.Services
             if (!isVanilla && !ConfigService.IsModdedUpgradesEnabled()) return;
             if (!ConfigService.IsUpgradeEnabled(upgradeKey))
             {
-                SharedUpgrades__.Logger.LogInfo($"SharedUpgrades: {upgradeKey} is disabled in config, skipping distribution.");
+                SharedUpgrades__.Logger.LogInfo($"{upgradeKey} is disabled in config, skipping distribution.");
                 return;
             }
-            string? upgradeSuffix = isVanilla ? upgradeKey["playerUpgrade".Length..] : null;
+            string? upgradeSuffix = isVanilla ? new Upgrade(upgradeKey).CleanName : null;
 
             foreach (PlayerAvatar player in SemiFunc.PlayerGetAll())
             {
                 if (player == null || player.photonView == null) continue;
                 if (player.photonView.ViewID == context.ViewID) continue;
-
+                
                 string steamID = (string)_steamID.GetValue(player);
                 if (string.IsNullOrEmpty(steamID)) continue;
 
-                if (!ConfigService.RollSharedUpgradesChance()) continue;
+                int playerLevel = 0;
+                if (StatsManager.instance.dictionaryOfDictionaries.TryGetValue(upgradeKey, out var upgradeDict))
+                {
+                    upgradeDict.TryGetValue(steamID, out playerLevel);
+                }
+
+                if (upgradeLimit > 0 
+                    && upgradeLimit <= playerLevel)
+                {
+                    SharedUpgrades__.Logger.LogInfo($"{upgradeKey} has reached the share limit set of: {upgradeLimit}");
+                    continue;
+                }
+
+                if (!ConfigService.RollSharedUpgradesChance())
+                {
+                    SharedUpgrades__.Logger.LogInfo($"Skipping {player.playerName} due to failed roll chance.");
+                    continue;
+                }
 
                 if (isVanilla)
                 {
                     photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, upgradeSuffix, difference);
-                    SharedUpgrades__.Logger.LogInfo($"SharedUpgrades: Distributed {upgradeKey} (+{difference}) to {steamID}.");
+                    SharedUpgrades__.Logger.LogInfo($"Distributed {upgradeKey} (+{difference}) to {steamID}.");
                 }
                 else
                 {
                     photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, currentValue);
-                    SharedUpgrades__.Logger.LogInfo($"SharedUpgrades: Distributed modded {upgradeKey} (={currentValue}) to {steamID}.");
+                    SharedUpgrades__.Logger.LogInfo($"Distributed modded {upgradeKey} (={currentValue}) to {steamID}.");
                 }
             }
         }
