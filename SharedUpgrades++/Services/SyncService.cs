@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Photon.Pun;
+using SharedUpgrades__.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -27,6 +28,7 @@ namespace SharedUpgrades__.Services
 
             foreach (var kvp in teamSnapshot)
             {
+                int upgradeLimit = ConfigService.UpgradeShareLimit(kvp.Key);
                 bool isVanilla = RegistryService.Instance.IsVanilla(kvp.Key);
                 // If modded upgrade and modded upgrades are disabled, skip it
                 if (!isVanilla && !ConfigService.IsModdedUpgradesEnabled()) continue;
@@ -36,6 +38,13 @@ namespace SharedUpgrades__.Services
                     .TryGetValue(kvp.Key, out var upgradeDict)
                     ? upgradeDict.GetValueOrDefault(steamID, 0)
                     : 0;
+
+                if (upgradeLimit > 0
+                    && upgradeLimit <= playerLevel)
+                {
+                    SharedUpgrades__.Logger.LogInfo($"{kvp.Key} has reached the share limit set of: {upgradeLimit}");
+                    continue;
+                }
 
                 int difference = kvp.Value - playerLevel;
                 if (difference <= 0) continue;
@@ -47,7 +56,7 @@ namespace SharedUpgrades__.Services
                 }
 
                 if (isVanilla)
-                    photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, kvp.Key["playerUpgrade".Length..], difference);
+                    photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, new Upgrade(kvp.Key).CleanName, difference);
                 else
                     photonView.RPC("UpdateStatRPC", RpcTarget.All, kvp.Key, steamID, kvp.Value);
             }

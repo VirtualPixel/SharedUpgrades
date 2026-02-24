@@ -11,7 +11,7 @@ namespace SharedUpgrades__.Services
                 return [];
 
             return StatsManager.instance.dictionaryOfDictionaries
-                .Where(kvp => kvp.Key.StartsWith("playerUpgrade"))
+                .Where(kvp => RegistryService.Instance.IsRegistered(kvp.Key))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.GetValueOrDefault(steamID, 0));
         }
 
@@ -21,7 +21,7 @@ namespace SharedUpgrades__.Services
             if (StatsManager.instance is null) return result;
 
             foreach (var kvp in StatsManager.instance.dictionaryOfDictionaries
-                .Where(k => k.Key.StartsWith("playerUpgrade")))
+                .Where(k => RegistryService.Instance.IsRegistered(k.Key)))
             {
                 result[kvp.Key] = kvp.Value.Values.DefaultIfEmpty(0).Max();
             }
