@@ -1,8 +1,13 @@
+## 1.1.4
+
+- **Fixed:** Non-host player not healed when taking a health upgrade
+
+---
+
 ## 1.1.3
 
 - **New:** Upgrading health now heals other players
 - **New:** Visual effect for each player, just like the player who used the upgrade
-- 
 
 ---
 

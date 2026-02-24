@@ -1,4 +1,5 @@
 using HarmonyLib;
+using Photon.Pun;
 using SharedUpgrades__.Models;
 using SharedUpgrades__.Services;
 using System.Collections.Generic;
@@ -73,6 +74,17 @@ namespace SharedUpgrades__.Patches
                         difference: currentValue - previousValue,
                         currentValue: currentValue
                     );
+
+                if (kvp.Key == "playerUpgradeHealth")
+                {
+                    PlayerAvatar buyer = SemiFunc.PlayerAvatarGetFromSteamID(__state.SteamID);
+                    if (buyer != null && !buyer.isLocal)
+                    {
+                        int healDiff = buyer.playerHealth.maxHealth - buyer.playerHealth.health;
+                        if (healDiff > 0)
+                            buyer.photonView.RPC("UpdateHealthRPC", RpcTarget.All, buyer.playerHealth.maxHealth, buyer.playerHealth.maxHealth, false);
+                    }
+                }
             }
         }
     }
