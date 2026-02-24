@@ -114,14 +114,16 @@ namespace SharedUpgrades__.Services
                 if (!string.IsNullOrEmpty(steamID)
                     && _tumble.GetValue(avatar) != null
                     && _physGrabber.GetValue(avatar) != null
-                    && _playerHealth.GetValue(avatar) != null)
+                    && _playerHealth.GetValue(avatar) != null
+                    && StatsManager.instance.playerUpgradeStrength.ContainsKey(steamID))
                     break;
             }
 
             if (avatar == null || string.IsNullOrEmpty(steamID)
                 || _tumble.GetValue(avatar) == null
                 || _physGrabber.GetValue(avatar) == null
-                || _playerHealth.GetValue(avatar) == null)
+                || _playerHealth.GetValue(avatar) == null
+                || !StatsManager.instance.playerUpgradeStrength.ContainsKey(steamID))
             {
                 SharedUpgrades__.Logger.LogWarning($"Late Join: Timed out waiting for {joiningPlayer.NickName}. Skipping.");
                 yield break;

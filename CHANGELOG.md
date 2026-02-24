@@ -1,3 +1,9 @@
+## 1.2.1
+
+- **Fixed:** Late-join strength race condition problem when playerUpgradeStrength doesn't contain the player's steamID
+
+---
+
 ## 1.2.0
 
 - **New:** Share limiting! Limit how many times each upgrade can be shared with others. Default is infinite

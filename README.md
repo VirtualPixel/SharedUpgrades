@@ -20,6 +20,7 @@ Share upgrades with your whole team in R.E.P.O.
 | Setting | Default | Description |
 |---|---|---|
 | Shared Upgrades | `true` | Share upgrades when any player purchases one |
+| Share Limit | `0` | Max shared level for this upgrade (0 = unlimited) |
 | Share Chance | `100` | % chance each upgrade is shared with teammates |
 | Late Join Sync | `true` | Catch up players who join mid-run |
 | Late Join Chance | `100` | % chance each upgrade a late joiner receives |
