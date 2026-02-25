@@ -1,3 +1,9 @@
+## 1.2.2
+
+- **Fixed:** Health logic is more accurate now, no longer using stale values 
+
+---
+
 ## 1.2.1
 
 - **Fixed:** Late-join strength race condition problem when playerUpgradeStrength doesn't contain the player's steamID
