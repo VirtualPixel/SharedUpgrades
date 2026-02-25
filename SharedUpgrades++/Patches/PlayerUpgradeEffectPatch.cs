@@ -11,10 +11,11 @@ namespace SharedUpgrades__.Patches
         {
             bool isHealth = upgradeName == "Health";
             PlayerAvatar playerAvatar = SemiFunc.PlayerAvatarGetFromSteamID(_steamID);
-            if (playerAvatar == null) 
+
+            if (playerAvatar == null)
             {
                 SharedUpgrades__.Logger.LogError($"TesterUpgradeCommandRPC(): PlayerAvatar not found for steamID: {_steamID}");
-                return; 
+                return;
             }
 
             if (playerAvatar.isLocal)
@@ -33,9 +34,10 @@ namespace SharedUpgrades__.Patches
                 playerAvatar.playerHealth.MaterialEffectOverride(PlayerHealth.Effect.Upgrade);
             }
 
-            if (isHealth && !playerAvatar.isLocal && SemiFunc.IsMasterClientOrSingleplayer())
+            if (isHealth && SemiFunc.IsMasterClientOrSingleplayer())
             {
-                int difference = playerAvatar.playerHealth.maxHealth - playerAvatar.playerHealth.health;
+                int difference = playerAvatar.playerHealth.maxHealth + (20 * upgradeNum) - playerAvatar.playerHealth.health;
+
                 if (difference > 0)
                 {
                     playerAvatar.playerHealth.HealOther(difference, false);
