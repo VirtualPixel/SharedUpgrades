@@ -64,27 +64,16 @@ namespace SharedUpgrades__.Patches
                 __state.LevelsBefore.TryGetValue(kvp.Key, out int previousValue);
 
                 if (currentValue <= previousValue) continue;
+                int difference = currentValue - previousValue;
 
-                SharedUpgrades__.Logger.LogInfo($"{__state.PlayerName} purchased {kvp.Key} (+{currentValue - previousValue}), distributing...");
-
+                SharedUpgrades__.Logger.LogInfo($"{__state.PlayerName} purchased {kvp.Key} (+{difference}), distributing...");
                 DistributionService.DistributeUpgrade
                     (
                         context: __state,
                         upgradeKey: kvp.Key,
-                        difference: currentValue - previousValue,
+                        difference: difference,
                         currentValue: currentValue
                     );
-
-                if (new Upgrade(kvp.Key).CleanName == "Health")
-                {
-                    PlayerAvatar buyer = SemiFunc.PlayerAvatarGetFromSteamID(__state.SteamID);
-                    if (buyer != null && !buyer.isLocal)
-                    {
-                        int healDiff = buyer.playerHealth.maxHealth - buyer.playerHealth.health;
-                        if (healDiff > 0)
-                            buyer.photonView.RPC("UpdateHealthRPC", RpcTarget.All, buyer.playerHealth.maxHealth, buyer.playerHealth.maxHealth, false);
-                    }
-                }
             }
         }
     }

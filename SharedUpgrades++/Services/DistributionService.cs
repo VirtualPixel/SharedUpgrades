@@ -66,6 +66,25 @@ namespace SharedUpgrades__.Services
                     SharedUpgrades__.Logger.LogInfo($"Distributed modded {upgradeKey} (={currentValue}) to {steamID}.");
                 }
             }
+            HealBuyer(context, upgradeKey, difference);
+        }
+    
+        private static void HealBuyer(UpgradeContext context, string upgradeKey, int difference)
+        {
+            if (upgradeKey == "playerUpgradeHealth")
+            {
+                PlayerAvatar buyer = SemiFunc.PlayerAvatarGetFromSteamID(context.SteamID);
+
+                if (buyer != null)
+                {
+                    int healDiff = buyer.playerHealth.maxHealth + (20 * difference) - buyer.playerHealth.health;
+
+                    if (healDiff > 0)
+                    {
+                        buyer.playerHealth.HealOther(healDiff, false);
+                    }
+                }
+            }
         }
     }
 }
