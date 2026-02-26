@@ -58,7 +58,7 @@ namespace SharedUpgrades__.Configuration
             );
 
             EnableSharedUpgradeHeal = config.Bind<bool>(
-                "Shared Health Upgrade Heal",
+                "Health Upgrade Heal",
                 "EnableSharedUpgradeHeal",
                 false,
                 "Heal players to full HP when receiving a shared health upgrade"
