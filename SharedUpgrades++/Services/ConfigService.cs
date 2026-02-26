@@ -25,6 +25,11 @@ namespace SharedUpgrades__.Services
             return PluginConfig.EnableLateJoinSync.Value;
         }
 
+        public static bool IsSharedUpgradeHealEnabled()
+        {
+            return PluginConfig.EnableSharedUpgradeHeal.Value;
+        }
+
         public static bool RollSharedUpgradesChance()
         {
             return Roll(PluginConfig.SharedUpgradeChance.Value);

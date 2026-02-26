@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
+using SharedUpgrades__.Configuration;
+using SharedUpgrades__.Services;
 
 namespace SharedUpgrades__.Patches
 {
@@ -34,7 +36,10 @@ namespace SharedUpgrades__.Patches
                 playerAvatar.playerHealth.MaterialEffectOverride(PlayerHealth.Effect.Upgrade);
             }
 
-            if (isHealth && SemiFunc.IsMasterClientOrSingleplayer())
+            // Heal the recipient of a shared health upgrade to match their new max health
+            if (isHealth
+                && SemiFunc.IsMasterClientOrSingleplayer()
+                && ConfigService.IsSharedUpgradeHealEnabled())
             {
                 int difference = playerAvatar.playerHealth.maxHealth + (20 * upgradeNum) - playerAvatar.playerHealth.health;
 

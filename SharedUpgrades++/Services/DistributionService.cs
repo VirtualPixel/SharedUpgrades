@@ -69,9 +69,11 @@ namespace SharedUpgrades__.Services
             HealBuyer(context, upgradeKey, difference);
         }
     
+        // Heal the buyer of a health upgrade to match their new max health
         private static void HealBuyer(UpgradeContext context, string upgradeKey, int difference)
         {
-            if (upgradeKey == "playerUpgradeHealth")
+            if (upgradeKey == "playerUpgradeHealth"
+                && ConfigService.IsSharedUpgradeHealEnabled())
             {
                 PlayerAvatar buyer = SemiFunc.PlayerAvatarGetFromSteamID(context.SteamID);
 

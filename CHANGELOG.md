@@ -1,3 +1,9 @@
+## 1.2.3
+
+- **New:** Added toggle to heal the buyer when purchasing a health upgrade (off by default)
+
+---
+
 ## 1.2.2
 
 - **Fixed:** Health logic is more accurate now, no longer using stale values 
