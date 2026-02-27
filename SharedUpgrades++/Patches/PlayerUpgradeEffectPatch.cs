@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
-using SharedUpgrades__.Configuration;
 using SharedUpgrades__.Services;
 
 namespace SharedUpgrades__.Patches

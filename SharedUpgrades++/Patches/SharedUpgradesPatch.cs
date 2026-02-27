@@ -85,8 +85,6 @@ namespace SharedUpgrades__.Patches
                     );
             }
 
-            // Fallback: REPOLib modded upgrades update only the local client's dictionary,
-            // so the master's snapshot won't detect changes for non-host purchases.
             // Match the item name against registered modded upgrades to identify the purchase.
             if (!distributed && __state.ItemName != null && ConfigService.IsModdedUpgradesEnabled())
             {
