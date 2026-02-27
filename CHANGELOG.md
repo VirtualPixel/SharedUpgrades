@@ -1,3 +1,10 @@
+## 1.2.4
+
+- **Fixed:** Modded upgrades weren't being shared when a non-host player bought them
+- **Fixed:** Visual effects didn't play when receiving a shared modded upgrade
+
+---
+
 ## 1.2.3
 
 - **New:** Added toggle to heal the buyer when purchasing a health upgrade (off by default)

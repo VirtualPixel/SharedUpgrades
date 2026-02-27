@@ -31,6 +31,15 @@ namespace SharedUpgrades__.Services
             vanillaUpgrades.UnionWith(result.Vanilla.Select(MakeUpgradeFromKey));
             moddedUpgrades.UnionWith(result.Modded.Select(MakeUpgradeFromKey));
             SharedUpgrades__.Logger.LogInfo($"Discovered {vanillaUpgrades.Count} vanilla upgrades and {moddedUpgrades.Count} modded upgrades.");
+
+            foreach(var upgrade in result.Vanilla)
+            {
+                SharedUpgrades__.Logger.LogInfo($"In Vanilla registry: {upgrade}");
+            }
+            foreach (var upgrade in result.Modded)
+            {
+                SharedUpgrades__.Logger.LogInfo($"In Modded registry: {upgrade}");
+            }
         }
         public void Clear()
         {
