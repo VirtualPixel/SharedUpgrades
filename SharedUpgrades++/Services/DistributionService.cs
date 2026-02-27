@@ -7,6 +7,7 @@ namespace SharedUpgrades__.Services
 {
     public static class DistributionService
     {
+        public static bool IsDistributing { get; private set; }
         private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
 
         public static void DistributeUpgrade(UpgradeContext context, string upgradeKey, int difference, int currentValue)
@@ -28,7 +29,9 @@ namespace SharedUpgrades__.Services
             }
             string? upgradeSuffix = isVanilla ? new Upgrade(upgradeKey).CleanName : null;
 
-            foreach (PlayerAvatar player in SemiFunc.PlayerGetAll())
+            var allPlayers = SemiFunc.PlayerGetAll();
+
+            foreach (PlayerAvatar player in allPlayers)
             {
                 if (player == null || player.photonView == null) continue;
                 if (player.photonView.ViewID == context.ViewID) continue;
@@ -62,7 +65,15 @@ namespace SharedUpgrades__.Services
                 }
                 else
                 {
-                    photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, currentValue);
+                    try
+                    {
+                        IsDistributing = true;
+                        photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, currentValue);
+                    }
+                    finally
+                    {
+                        IsDistributing = false;
+                    }
                     SharedUpgrades__.Logger.LogInfo($"Distributed modded {upgradeKey} (={currentValue}) to {steamID}.");
                 }
             }
