@@ -23,7 +23,7 @@ namespace SharedUpgrades__.Patches
 
             PlayerAvatar player = SemiFunc.PlayerAvatarGetFromSteamID(key);
 
-            // === Phase 1: Visual effects (all clients) ===
+            // Visual effects (all clients) 
             if (player != null)
             {
                 if (player.isLocal)
@@ -43,7 +43,7 @@ namespace SharedUpgrades__.Patches
                 }
             }
 
-            // === Phase 2: Distribution (master only, no re-entry) ===
+            // Distribution (master only, no re-entry)
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
             if (DistributionService.IsDistributing) return;
 
