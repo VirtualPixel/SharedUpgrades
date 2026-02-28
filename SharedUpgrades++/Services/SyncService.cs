@@ -29,6 +29,7 @@ namespace SharedUpgrades__.Services
             {
                 int upgradeLimit = ConfigService.UpgradeShareLimit(kvp.Key);
                 bool isVanilla = RegistryService.Instance.IsVanilla(kvp.Key);
+
                 // If modded upgrade and modded upgrades are disabled, skip it
                 if (!isVanilla && !ConfigService.IsModdedUpgradesEnabled()) continue;
                 if (!ConfigService.IsUpgradeEnabled(kvp.Key)) continue;

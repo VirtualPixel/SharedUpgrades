@@ -1,6 +1,8 @@
+using ExitGames.Client.Photon;
 using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,10 @@ namespace SharedUpgrades__.Services
                 var props = new ExitGames.Client.Photon.Hashtable { { WatermarkService.RoomKey, true } };
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
             }
-            catch { }
+            catch (Exception e) 
+            {
+                SharedUpgrades__.Logger.LogError($"Unable to set room properties: {e.Message}");
+            }
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
