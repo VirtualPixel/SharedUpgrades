@@ -9,6 +9,11 @@ namespace SharedUpgrades__.Services
     {
         private static readonly Dictionary<string, ConfigEntry<bool>> upgradeToggles = [];
         private static readonly Dictionary<string, ConfigEntry<int>> limitSliders = [];
+        private static readonly HashSet<string> _disabledByDefault =
+        [
+            "playerUpgradeObjectValue",
+            "playerUpgradeObjectDurability"
+        ];
 
         public static bool IsSharedUpgradesEnabled()
         {
@@ -28,6 +33,11 @@ namespace SharedUpgrades__.Services
         public static bool IsSharedUpgradeHealEnabled()
         {
             return PluginConfig.EnableSharedUpgradeHeal.Value;
+        }
+
+        public static bool IsShareNotificationEnabled()
+        {
+            return PluginConfig.EnableShareNotification.Value;
         }
 
         public static bool RollSharedUpgradesChance()
@@ -77,7 +87,7 @@ namespace SharedUpgrades__.Services
                 upgradeToggles[upgrade.Name] = PluginConfig.ConfigFile!.Bind(
                     section,
                     upgrade.CleanName,
-                    true,
+                    !_disabledByDefault.Contains(upgrade.Name),
                     $"Enable sharing for {upgrade.CleanName}"
                 );
 

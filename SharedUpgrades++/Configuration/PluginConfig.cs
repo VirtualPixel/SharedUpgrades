@@ -10,6 +10,7 @@ namespace SharedUpgrades__.Configuration
         public static ConfigEntry<int> LateJoinSyncChance = null!;
         public static ConfigEntry<bool> EnableModdedUpgrades = null!;
         public static ConfigEntry<bool> EnableSharedUpgradeHeal = null!;
+        public static ConfigEntry<bool> EnableShareNotification = null!;
         public static ConfigFile? ConfigFile;
 
         public static void Init(ConfigFile config)
@@ -62,6 +63,13 @@ namespace SharedUpgrades__.Configuration
                 "EnableSharedUpgradeHeal",
                 false,
                 "Heal players to full HP when receiving a shared health upgrade"
+            );
+
+            EnableShareNotification = config.Bind<bool>(
+                "Notify When Shared",
+                "EnableShareNotification",
+                true,
+                "Provide a visual effect when upgrades are shared with you"
             );
         }
     }

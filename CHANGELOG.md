@@ -1,3 +1,12 @@
+## 1.2.5
+
+- **New:** Added toggle for enabling/disabling shared upgrade notifications for those running the mod
+- **New:** REPOLib is now better supported, it's a soft dependency so it's not required but if users have upgrades using REPOLib it will grab them
+- **Changed** Player Upgrade Object Value and Object Durability from MoreUpgrades default to disabled, these are item upgrades and not techinically player upgrades. Could have unintended consequences if enabled
+- **Fixed** Upgrade registry could persdist stale data across runs
+
+---
+
 ## 1.2.4
 
 - **Fixed:** Modded upgrades weren't being shared when a non-host player bought them
