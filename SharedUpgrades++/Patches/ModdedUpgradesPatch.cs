@@ -24,7 +24,7 @@ namespace SharedUpgrades__.Patches
             PlayerAvatar player = SemiFunc.PlayerAvatarGetFromSteamID(key);
 
             // Visual effects (all clients) 
-            if (player != null)
+            if (player != null && ConfigService.IsShareNotificationEnabled())
             {
                 if (player.isLocal)
                 {
@@ -47,7 +47,11 @@ namespace SharedUpgrades__.Patches
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
             if (DistributionService.IsDistributing) return;
 
-            if (player == null || player.photonView == null) return;
+            if (player == null || player.photonView == null)
+            {
+                SharedUpgrades__.Logger.LogWarning("Player is null, unable to distirbute modded upgrade.");
+                return;
+            }
 
             string playerName = (string)_playerName.GetValue(player);
             SharedUpgrades__.Logger.LogInfo($"{playerName} purchased {dictionaryName} (+1), distributing...");
@@ -59,6 +63,7 @@ namespace SharedUpgrades__.Patches
                 levelsBefore: new Dictionary<string, int>()
             );
 
+            // TODO: Update this to support dynamic difference, not hard coded
             DistributionService.DistributeUpgrade(
                 context: context,
                 upgradeKey: dictionaryName,

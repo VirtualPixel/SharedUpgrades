@@ -25,6 +25,7 @@ Share upgrades with your whole team in R.E.P.O.
 | Late Join Sync | `true` | Catch up players who join mid-run |
 | Late Join Chance | `100` | % chance each upgrade a late joiner receives |
 | Health Upgrade Heal | `false` | Heal players to full HP when they receive a shared health upgrade |
+| Shared Notification | `true` | For all clients running the mod, they are notified of receiving shared upgrades |
 | Modded Upgrades | `true` | Include upgrades from other mods |
 
 Supports **REPOConfig** for live in-game config changes without restarting.

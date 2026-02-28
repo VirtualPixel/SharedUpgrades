@@ -24,7 +24,7 @@ namespace SharedUpgrades__.Patches
             if (_itemToggle.GetValue(instance) is not ItemToggle { toggleState: true } toggle)
                 return null;
 
-            viewID = (int)_playerTogglePhotonId.GetValue(toggle);
+            viewID = (int)_playerTogglePhotonId.GetValue(toggle); 
             return SemiFunc.PlayerAvatarGetFromPhotonID(viewID);
         }
 
