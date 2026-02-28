@@ -19,22 +19,25 @@ namespace SharedUpgrades__.Patches
                 return;
             }
 
-            if (playerAvatar.isLocal)
+            if (ConfigService.IsShareNotificationEnabled())
             {
-                StatsUI.instance.Fetch();
-                StatsUI.instance.ShowStats();
-                CameraGlitch.Instance.PlayUpgrade();
-            }
-            else
-            {
-                GameDirector.instance.CameraImpact.ShakeDistance(5f, 1f, 6f, playerAvatar.transform.position, 0.2f);
-            }
+                if (playerAvatar.isLocal)
+                {
+                    StatsUI.instance.Fetch();
+                    StatsUI.instance.ShowStats();
+                    CameraGlitch.Instance.PlayUpgrade();
+                }
+                else
+                {
+                    GameDirector.instance.CameraImpact.ShakeDistance(5f, 1f, 6f, playerAvatar.transform.position, 0.2f);
+                }
 
-            if (!GameManager.Multiplayer() || PhotonNetwork.IsMasterClient)
-            {
-                playerAvatar.playerHealth.MaterialEffectOverride(PlayerHealth.Effect.Upgrade);
+                if (!GameManager.Multiplayer() || PhotonNetwork.IsMasterClient)
+                {
+                    playerAvatar.playerHealth.MaterialEffectOverride(PlayerHealth.Effect.Upgrade);
+                }
             }
-
+            
             // Heal the recipient of a shared health upgrade to match their new max health
             if (isHealth
                 && SemiFunc.IsMasterClientOrSingleplayer()

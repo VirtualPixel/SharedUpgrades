@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
 using SharedUpgrades__.Models;
+using System;
 using System.Reflection;
 
 namespace SharedUpgrades__.Services
@@ -31,52 +32,59 @@ namespace SharedUpgrades__.Services
 
             var allPlayers = SemiFunc.PlayerGetAll();
 
-            foreach (PlayerAvatar player in allPlayers)
-            {
-                if (player == null || player.photonView == null) continue;
-                if (player.photonView.ViewID == context.ViewID) continue;
+            IsDistributing = true;
+
+            try { 
+                foreach (PlayerAvatar player in allPlayers)
+                {
+                    if (player == null || player.photonView == null) continue;
+                    if (player.photonView.ViewID == context.ViewID) continue;
                 
-                string steamID = (string)_steamID.GetValue(player);
-                if (string.IsNullOrEmpty(steamID)) continue;
+                    string steamID = (string)_steamID.GetValue(player);
+                    if (string.IsNullOrEmpty(steamID)) continue;
 
-                int playerLevel = 0;
-                if (StatsManager.instance.dictionaryOfDictionaries.TryGetValue(upgradeKey, out var upgradeDict))
-                {
-                    upgradeDict.TryGetValue(steamID, out playerLevel);
-                }
-
-                if (upgradeLimit > 0 
-                    && upgradeLimit <= playerLevel)
-                {
-                    SharedUpgrades__.Logger.LogInfo($"{upgradeKey} has reached the share limit set of: {upgradeLimit}");
-                    continue;
-                }
-
-                if (!ConfigService.RollSharedUpgradesChance())
-                {
-                    SharedUpgrades__.Logger.LogInfo($"Skipping {player.playerName} due to failed roll chance.");
-                    continue;
-                }
-
-                if (isVanilla)
-                {
-                    photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, upgradeSuffix, difference);
-                    SharedUpgrades__.Logger.LogInfo($"Distributed {upgradeKey} (+{difference}) to {steamID}.");
-                }
-                else
-                {
-                    try
+                    int playerLevel = 0;
+                    if (StatsManager.instance.dictionaryOfDictionaries.TryGetValue(upgradeKey, out var upgradeDict))
                     {
-                        IsDistributing = true;
+                        upgradeDict.TryGetValue(steamID, out playerLevel);
+                    }
+
+                    if (upgradeLimit > 0 
+                        && upgradeLimit <= playerLevel)
+                    {
+                        SharedUpgrades__.Logger.LogInfo($"{upgradeKey} has reached the share limit set of: {upgradeLimit}");
+                        continue;
+                    }
+
+                    if (!ConfigService.RollSharedUpgradesChance())
+                    {
+                        SharedUpgrades__.Logger.LogInfo($"Skipping {player.playerName} due to failed roll chance.");
+                        continue;
+                    }
+
+                    if (isVanilla)
+                    {
+                        photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, upgradeSuffix, difference);
+                        SharedUpgrades__.Logger.LogInfo($"Distributed {upgradeKey} (+{difference}) to {steamID}.");
+                    }
+                    else
+                    {
                         photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, currentValue);
+
+                        SharedUpgrades__.Logger.LogInfo($"Distributed modded {upgradeKey} (={currentValue}) to {steamID}.");
                     }
-                    finally
-                    {
-                        IsDistributing = false;
-                    }
-                    SharedUpgrades__.Logger.LogInfo($"Distributed modded {upgradeKey} (={currentValue}) to {steamID}.");
                 }
             }
+            catch (Exception e)
+            {
+                SharedUpgrades__.Logger.LogError($"Failed to distribute {upgradeKey} for player: {context.PlayerName}. Exception: {e.Message}");
+            }
+            finally
+            {
+                IsDistributing = false;
+            }
+
+            // Only buyer should get the heal, not everyone getting distributed to
             HealBuyer(context, upgradeKey, difference);
         }
     
