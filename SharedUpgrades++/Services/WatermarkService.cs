@@ -91,7 +91,7 @@ namespace SharedUpgrades__.Services
                             Version = val as string ?? "UNKNOWN";
                         show = !isHost && modPresent;
                         break;
-                    } 
+                    }
                 }
                 catch { }
             }

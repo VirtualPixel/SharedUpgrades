@@ -97,7 +97,7 @@
 
 ## 1.0.1
 
-- **Fixed:** Improved compatibity with latest BepInEx release
+- **Fixed:** Improved compatibility with latest BepInEx release
 
 ---
 
