@@ -11,6 +11,7 @@ namespace SharedUpgrades__.Services
     internal class WatermarkService : MonoBehaviour
     {
         internal const string RoomKey = "su__v1";
+        private static string Version = "UNKNOWN";
         private static readonly string? OwnerID = LoadOwnerID();
 
         private static string? LoadOwnerID()
@@ -82,15 +83,14 @@ namespace SharedUpgrades__.Services
 
                     bool isHost = PhotonNetwork.IsMasterClient;
                     bool modPresent = PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomKey);
+                    object? val;
 
                     if (isHost || modPresent)
                     {
+                        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomKey, out val))
+                            Version = val as string ?? "UNKNOWN";
                         show = !isHost && modPresent;
-                        SharedUpgrades__.Logger.LogInfo($"[Watermark] show={show}, isHost={isHost}, modPresent={modPresent}");
                         break;
-                    } else
-                    {
-                        SharedUpgrades__.Logger.LogInfo($"[Watermark] show=False, isHost={isHost}, modPresent={modPresent}");
                     }
                 }
                 catch { }
@@ -109,7 +109,7 @@ namespace SharedUpgrades__.Services
                     fontSize = 24,
                     normal = { textColor = new Color(1f, 1f, 1f, 0.15f) }
                 };
-                GUI.Label(new Rect(6, Screen.height - 72, 160, 56), "S++", style);
+                GUI.Label(new Rect(6, Screen.height - 72, 160, 56), $"SUP: {Version}", style);
             }
             catch { }
         }

@@ -7,7 +7,6 @@ namespace SharedUpgrades__.Configuration
         public static ConfigEntry<bool> EnableSharedUpgrades = null!;
         public static ConfigEntry<int> SharedUpgradeChance = null!;
         public static ConfigEntry<bool> EnableLateJoinSync = null!;
-        public static ConfigEntry<int> LateJoinSyncChance = null!;
         public static ConfigEntry<bool> EnableModdedUpgrades = null!;
         public static ConfigEntry<bool> EnableSharedUpgradeHeal = null!;
         public static ConfigEntry<bool> EnableShareNotification = null!;
@@ -18,55 +17,45 @@ namespace SharedUpgrades__.Configuration
             ConfigFile = config;
 
             EnableSharedUpgrades = config.Bind<bool>(
-                "Shared Upgrades",
+                "General",
                 "EnableSharedUpgrades",
                 true,
-                "Toggle for Shared Upgrades"
+                "Enable or disable all upgrade sharing"
             );
 
             SharedUpgradeChance = config.Bind<int>(
-                "Shared Upgrades Chance",
+                "General",
                 "SharedUpgradesChance",
                 100,
                 new ConfigDescription(
-                    "0-100% chance the upgrade will be applied to other players",
+                    "Chance per upgrade level to be shared with each player",
                     new AcceptableValueRange<int>(0, 100)
                 )
             );
 
             EnableLateJoinSync = config.Bind<bool>(
-                "Late Join Sync",
+                "General",
                 "LateJoinSync",
                 true,
-                "If players join late, should the previous upgrades be applied?"
-            );
-
-            LateJoinSyncChance = config.Bind<int>(
-                "Late Join Sync Chance",
-                "LateJoinSyncChance",
-                100,
-                new ConfigDescription(
-                    "0-100% chance for previously applied upgrades to apply to players who join late",
-                    new AcceptableValueRange<int>(0,100)
-                )
+                "Sync upgrades to players who join mid-run"
             );
 
             EnableModdedUpgrades = config.Bind<bool>(
-                "Modded Upgrade Sync",
+                "General",
                 "EnableModdedUpgrades",
                 true,
-                "This feature will sync upgrades introduced by mods."
+                "Sync upgrades added by other mods"
             );
 
             EnableSharedUpgradeHeal = config.Bind<bool>(
-                "Health Upgrade Heal",
+                "Effects",
                 "EnableSharedUpgradeHeal",
                 false,
                 "Heal players to full HP when receiving a shared health upgrade"
             );
 
             EnableShareNotification = config.Bind<bool>(
-                "Notify When Shared",
+                "Effects",
                 "EnableShareNotification",
                 true,
                 "Provide a visual effect when upgrades are shared with you"
