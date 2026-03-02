@@ -1,6 +1,5 @@
 param(
-    [string]$
-    ,
+    [string]$Version,
     [string]$DllPath,
     [string]$RepoRoot
 )

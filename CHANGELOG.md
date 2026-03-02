@@ -3,6 +3,7 @@
 - **Changed:** Late join sync now simulates per-level chance rather than a single all-or-nothing roll — late joiners receive a realistic spread instead of full upgrades or none
 - **Changed:** `LateJoinSyncChance` removed; `SharedUpgradesChance` now applies to both real-time sharing and late join sync
 - **Changed:** Config sections consolidated into General and Effects for cleaner layout
+- **Changed:** Updated README to be more consistent with naming - SharedUpgradesPlus
 - **New:** Watermark displays the host's running mod version during debug testing
 - **Fixed:** LateJoinSync rolls lower than 100% now adhere to share limiting
 
@@ -12,8 +13,8 @@
 
 - **New:** Added toggle for enabling/disabling shared upgrade notifications for those running the mod
 - **New:** REPOLib is now better supported, it's a soft dependency so it's not required but if users have upgrades using REPOLib it will grab them
-- **Changed:** Player Upgrade Object Value and Object Durability from MoreUpgrades default to disabled, these are item upgrades and not techinically player upgrades. Could have unintended consequences if enabled
-- **Fixed:** Upgrade registry could persdist stale data across runs
+- **Changed:** Player Upgrade Object Value and Object Durability from MoreUpgrades default to disabled, these are item upgrades and not technically player upgrades. Could have unintended consequences if enabled
+- **Fixed:** Upgrade registry could persist stale data across runs
 
 ---
 
