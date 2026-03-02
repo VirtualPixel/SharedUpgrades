@@ -25,7 +25,7 @@ namespace SharedUpgrades__.Services
             try
             {
                 if (!PhotonNetwork.IsMasterClient) return;
-                var props = new ExitGames.Client.Photon.Hashtable { { WatermarkService.RoomKey, true } };
+                var props = new ExitGames.Client.Photon.Hashtable { { WatermarkService.RoomKey, BuildInfo.Version } };
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
             }
             catch (Exception e) 

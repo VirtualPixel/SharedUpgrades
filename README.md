@@ -1,4 +1,4 @@
-# SharedUpgrades++
+# SharedUpgradesPlus
 
 Share upgrades with your whole team in R.E.P.O.
 
@@ -17,27 +17,53 @@ Share upgrades with your whole team in R.E.P.O.
 
 ## Config
 
+**General**
+
 | Setting | Default | Description |
 |---|---|---|
-| Shared Upgrades | `true` | Share upgrades when any player purchases one |
-| Share Limit | `0` | Max shared level for this upgrade (0 = unlimited) |
-| Share Chance | `100` | % chance each upgrade is shared with teammates |
-| Late Join Sync | `true` | Catch up players who join mid-run |
-| Late Join Chance | `100` | % chance each upgrade a late joiner receives |
-| Health Upgrade Heal | `false` | Heal players to full HP when they receive a shared health upgrade |
-| Shared Notification | `true` | For all clients running the mod, they are notified of receiving shared upgrades |
-| Modded Upgrades | `true` | Include upgrades from other mods |
+| Enable Shared Upgrades | `true` | Enable or disable all upgrade sharing |
+| Shared Upgrades Chance | `100` | % chance per upgrade level to be shared with each player |
+| Late Join Sync | `true` | Sync upgrades to players who join mid-run |
+| Enable Modded Upgrades | `true` | Sync upgrades added by other mods |
+
+**Effects**
+
+| Setting | Default | Description |
+|---|---|---|
+| Enable Shared Upgrade Heal | `false` | Heal players to full HP when receiving a shared health upgrade |
+| Enable Share Notification | `true` | Visual effect when upgrades are shared with you |
+
+**Per-Upgrade** *(one entry per upgrade type, auto-generated)*
+
+| Setting | Default | Description |
+|---|---|---|
+| [Upgrade Name] | `true` | Enable sharing for this upgrade |
+| [Upgrade Name] Share Limit | `0` | Others won't receive this upgrade past this level (0 = unlimited) |
 
 Supports **REPOConfig** for live in-game config changes without restarting.
 
 ## Standing on the shoulders of giants
 
-Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/) and [BetterTeamUpgrades](https://thunderstore.io/c/repo/p/MrBytesized/BetterTeamUpgrades/) showed the community what shared upgrades could be. SharedUpgrades++ builds on that foundation.
+Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgrades/) and [BetterTeamUpgrades](https://thunderstore.io/c/repo/p/MrBytesized/BetterTeamUpgrades/) showed the community what shared upgrades could be. SharedUpgradesPlus builds on that foundation.
 
-## Roadmap
+## Maintenance
 
-- **Per-player sharing** — choose which players in your lobby receive shared upgrades
+SharedUpgradesPlus is feature complete. No active development planned — but if you run into a bug or have a reasonable feature request, open an issue on GitHub and I'll take a look.
 
 ---
 
-**Bugs or suggestions?** [Open an issue on GitHub](https://github.com/VirtualPixel/SharedUpgrades/issues)
+## Contact
+
+| Purpose | Where |
+|---|---|
+| Bug reports & suggestions | [GitHub Issues](https://github.com/VirtualPixel/SharedUpgrades/issues) |
+| Community & discussion | [SharedUpgradesPlus Discord](https://discord.gg/9fDzZ9sk95) |
+| R.E.P.O. Modding community | [#released-mods post](https://discord.com/channels/1344557689979670578/1474853628056571964) |
+
+<a href="https://ko-fi.com/vippydev" target="_blank">
+<img src="https://storage.ko-fi.com/cdn/brandasset/v2/support_me_on_kofi_dark.png" alt="Ko-Fi" width="200px"/>
+</a>
+
+---
+
+*Also known as SharedUpgrades+ and SharedUpgrades++*

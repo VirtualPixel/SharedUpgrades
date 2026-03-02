@@ -1,6 +1,7 @@
 using HarmonyLib;
 using Photon.Pun;
 using SharedUpgrades__.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -46,22 +47,38 @@ namespace SharedUpgrades__.Services
                     continue;
                 }
 
-                int difference = kvp.Value - playerLevel;
-                if (difference <= 0) continue;
+                int value = kvp.Value;
+                int difference = value - playerLevel;
 
-                if (!ConfigService.RollLateJoinSyncChance())
-                {
-                    SharedUpgrades__.Logger.LogInfo($"Late Join: Roll failed for {kvp.Key} ({steamID}), skipping.");
-                    continue;
-                }
+                // Cap difference based on Share limit, should not exceed this
+                if (upgradeLimit > 0)
+                    difference = Math.Min(difference, upgradeLimit - playerLevel);
+
+                difference = SimulateRealisticLevelling(difference);
+                value = playerLevel + difference;
+                if (difference <= 0) continue;
 
                 if (isVanilla)
                     photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, new Upgrade(kvp.Key).CleanName, difference);
                 else
-                    photonView.RPC("UpdateStatRPC", RpcTarget.All, kvp.Key, steamID, kvp.Value);
+                    photonView.RPC("UpdateStatRPC", RpcTarget.All, kvp.Key, steamID, value);
             }
 
             SharedUpgrades__.Logger.LogInfo($"Late Join: Sync complete for {playerName}.");
+        }
+
+        private static int SimulateRealisticLevelling(int value = 0)
+        {
+            if (ConfigService.SharedUpgradesChancePercentage() == 100 || value <= 0) return value;
+            int simulatedValue = 0;
+
+            for (int i = 0; i < value; i++)
+            {
+                if(ConfigService.RollSharedUpgradesChance())
+                    simulatedValue++;
+            }
+
+            return simulatedValue;
         }
     }
 }
