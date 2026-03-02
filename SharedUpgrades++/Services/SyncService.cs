@@ -67,14 +67,15 @@ namespace SharedUpgrades__.Services
             SharedUpgrades__.Logger.LogInfo($"Late Join: Sync complete for {playerName}.");
         }
 
-        private static int SimulateRealisticLevelling(int value = 0)
+        private static int SimulateRealisticLevelling(int value)
         {
-            if (ConfigService.SharedUpgradesChancePercentage() == 100 || value <= 0) return value;
+            int chance = ConfigService.SharedUpgradesChancePercentage();
+            if (chance >= 100 || value <= 0) return value;
             int simulatedValue = 0;
 
             for (int i = 0; i < value; i++)
             {
-                if(ConfigService.RollSharedUpgradesChance())
+                if (ConfigService.RollSharedUpgradesChance())
                     simulatedValue++;
             }
 
