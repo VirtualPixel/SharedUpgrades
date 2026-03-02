@@ -40,14 +40,14 @@ namespace SharedUpgrades__.Services
             return PluginConfig.EnableShareNotification.Value;
         }
 
+        public static int SharedUpgradesChancePercentage()
+        {
+            return PluginConfig.SharedUpgradeChance.Value;
+        }
+
         public static bool RollSharedUpgradesChance()
         {
             return Roll(PluginConfig.SharedUpgradeChance.Value);
-        }
-
-        public static bool RollLateJoinSyncChance()
-        {
-            return Roll(PluginConfig.LateJoinSyncChance.Value);
         }
 
         private static bool Roll(int chance)
@@ -96,7 +96,7 @@ namespace SharedUpgrades__.Services
                     upgrade.CleanName + " Share Limit",
                     0,
                     new ConfigDescription(
-                        "Max shared level for this upgrade (0 = unlimited)",
+                        "Others won't receive this upgrade past this level (0 = unlimited)",
                         new AcceptableValueRange<int>(0, 100)
                     )
                 );

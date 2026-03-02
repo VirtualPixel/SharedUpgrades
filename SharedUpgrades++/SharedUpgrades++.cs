@@ -2,7 +2,6 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using SharedUpgrades__.Configuration;
-using SharedUpgrades__.Services;
 using UnityEngine;
 
 namespace SharedUpgrades__
