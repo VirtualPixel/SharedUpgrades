@@ -55,6 +55,9 @@ namespace SharedUpgrades__.Services
             return UnityEngine.Random.Range(0, 100) < chance;
         }
 
+        public static bool IsDebugLoggingEnabled() => PluginConfig.LoggingLevel.Value >= Configuration.VerbosityLevel.Debug;
+        public static bool IsVerboseLoggingEnabled() => PluginConfig.LoggingLevel.Value >= Configuration.VerbosityLevel.Verbose;
+
         public static bool IsUpgradeEnabled(string upgradeKey)
         {
             if (upgradeToggles.TryGetValue(upgradeKey, out var toggle))

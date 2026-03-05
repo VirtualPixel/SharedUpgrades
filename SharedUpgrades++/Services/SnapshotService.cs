@@ -10,9 +10,12 @@ namespace SharedUpgrades__.Services
             if (string.IsNullOrEmpty(steamID) || StatsManager.instance is null)
                 return [];
 
-            return StatsManager.instance.dictionaryOfDictionaries
+            var result = StatsManager.instance.dictionaryOfDictionaries
                 .Where(kvp => RegistryService.Instance.IsRegistered(kvp.Key))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.GetValueOrDefault(steamID, 0));
+
+            SharedUpgrades__.LogVerbose($"[Snapshot] Player snapshot for {steamID} — {result.Count} upgrade(s).");
+            return result;
         }
 
         public static Dictionary<string, int> SnapshotTeamMaxLevels()
@@ -26,6 +29,7 @@ namespace SharedUpgrades__.Services
                 result[kvp.Key] = kvp.Value.Values.DefaultIfEmpty(0).Max();
             }
 
+            SharedUpgrades__.LogVerbose($"[Snapshot] Team snapshot — {result.Count} upgrade(s).");
             return result;
         }
     }

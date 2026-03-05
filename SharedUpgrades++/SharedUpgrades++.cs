@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using SharedUpgrades__.Configuration;
+using SharedUpgrades__.Services;
 using UnityEngine;
 
 namespace SharedUpgrades__
@@ -27,7 +28,19 @@ namespace SharedUpgrades__
 
             Patch();
 
-            Logger.LogInfo($"{Info.Metadata.GUID} v{Info.Metadata.Version} has loaded!");
+            Logger.LogInfo($"{Info.Metadata.GUID} v{Info.Metadata.Version} has loaded! LogLevel={PluginConfig.LoggingLevel.Value}");
+        }
+
+        internal static void LogInfo(string msg)
+        {
+            if (ConfigService.IsDebugLoggingEnabled())
+                Logger.LogInfo(msg);
+        }
+
+        internal static void LogVerbose(string msg)
+        {
+            if (ConfigService.IsVerboseLoggingEnabled())
+                Logger.LogDebug(msg);
         }
 
         internal void Patch()

@@ -22,37 +22,43 @@ namespace SharedUpgrades__.Services
 
         public override void OnJoinedRoom()
         {
+            SharedUpgrades__.LogVerbose($"OnJoinedRoom (isMaster={PhotonNetwork.IsMasterClient})");
             try
             {
                 if (!PhotonNetwork.IsMasterClient) return;
                 var props = new ExitGames.Client.Photon.Hashtable { { WatermarkService.RoomKey, BuildInfo.Version } };
                 PhotonNetwork.CurrentRoom.SetCustomProperties(props);
+                SharedUpgrades__.LogVerbose($"Set room property: {WatermarkService.RoomKey}={BuildInfo.Version}");
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
-                SharedUpgrades__.Logger.LogError($"Unable to set room properties: {e.Message}");
+                SharedUpgrades__.Logger.LogError($"Couldn't set room properties: {e.Message}");
             }
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
+            SharedUpgrades__.LogVerbose($"OnPlayerEnteredRoom: {newPlayer.NickName} (isMaster={SemiFunc.IsMasterClientOrSingleplayer()}, activeRun={IsActiveRun()}, lateJoin={ConfigService.IsLateJoinSyncEnabled()})");
+
             if (!ConfigService.IsLateJoinSyncEnabled() || !ConfigService.IsSharedUpgradesEnabled()) return;
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
 
             if (!IsActiveRun())
             {
                 _pendingSync.Add(newPlayer);
-                SharedUpgrades__.Logger.LogDebug($"Deferred Sync: Queued {newPlayer.NickName} for sync on next active level.");
+                SharedUpgrades__.LogInfo($"Deferred sync: {newPlayer.NickName} joined outside of a level, queued. ({_pendingSync.Count} pending)");
                 return;
             }
 
             var teamSnapshot = SnapshotService.SnapshotTeamMaxLevels();
+            SharedUpgrades__.LogVerbose($"Starting immediate sync for {newPlayer.NickName} ({teamSnapshot.Count} upgrade(s) in snapshot).");
             StartCoroutine(WaitAndSync(newPlayer, teamSnapshot));
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            _pendingSync.Remove(otherPlayer);
+            bool removed = _pendingSync.Remove(otherPlayer);
+            SharedUpgrades__.LogVerbose($"OnPlayerLeftRoom: {otherPlayer.NickName} (was pending: {removed}, pending count: {_pendingSync.Count})");
         }
 
         private static bool IsActiveRun()
@@ -79,6 +85,8 @@ namespace SharedUpgrades__.Services
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            SharedUpgrades__.LogVerbose($"OnSceneLoaded: {scene.name} ({_pendingSync.Count} pending, activeRun={IsActiveRun()})");
+
             if (_pendingSync.Count == 0) return;
             if (!IsActiveRun()) return;
             if (!ConfigService.IsLateJoinSyncEnabled() || !ConfigService.IsSharedUpgradesEnabled()) return;
@@ -86,10 +94,11 @@ namespace SharedUpgrades__.Services
 
             var teamSnapshot = SnapshotService.SnapshotTeamMaxLevels();
 
-            SharedUpgrades__.Logger.LogInfo($"Deferred Sync: Processing {_pendingSync.Count} queued player(s) on level load.");
+            SharedUpgrades__.LogInfo($"Deferred sync: {scene.name} loaded, processing {_pendingSync.Count} queued player(s).");
 
             foreach (var player in _pendingSync)
             {
+                SharedUpgrades__.LogVerbose($"Starting deferred sync for {player.NickName}.");
                 StartCoroutine(WaitAndSync(player, teamSnapshot));
             }
 
@@ -105,6 +114,8 @@ namespace SharedUpgrades__.Services
             PlayerAvatar? avatar = null;
             string steamID = string.Empty;
 
+            SharedUpgrades__.LogVerbose($"Waiting for {joiningPlayer.NickName} to be ready (max {maxWait}s)...");
+
             while (elapsed < maxWait)
             {
                 yield return new WaitForSeconds(checkInterval);
@@ -116,11 +127,14 @@ namespace SharedUpgrades__.Services
                 if (avatar != null)
                     steamID = (string)_steamID.GetValue(avatar);
 
-                if (!string.IsNullOrEmpty(steamID)
-                    && _tumble.GetValue(avatar) != null
-                    && _physGrabber.GetValue(avatar) != null
-                    && _playerHealth.GetValue(avatar) != null
-                    && StatsManager.instance.playerUpgradeStrength.ContainsKey(steamID))
+                bool tumbleReady = avatar != null && _tumble.GetValue(avatar) != null;
+                bool grabberReady = avatar != null && _physGrabber.GetValue(avatar) != null;
+                bool healthReady = avatar != null && _playerHealth.GetValue(avatar) != null;
+                bool statsReady = !string.IsNullOrEmpty(steamID) && StatsManager.instance.playerUpgradeStrength.ContainsKey(steamID);
+
+                SharedUpgrades__.LogVerbose($"{joiningPlayer.NickName} not ready yet ({elapsed:F1}s) — tumble={tumbleReady}, grabber={grabberReady}, health={healthReady}, stats={statsReady}");
+
+                if (!string.IsNullOrEmpty(steamID) && tumbleReady && grabberReady && healthReady && statsReady)
                     break;
             }
 
@@ -130,10 +144,11 @@ namespace SharedUpgrades__.Services
                 || _playerHealth.GetValue(avatar) == null
                 || !StatsManager.instance.playerUpgradeStrength.ContainsKey(steamID))
             {
-                SharedUpgrades__.Logger.LogWarning($"Late Join: Timed out waiting for {joiningPlayer.NickName}. Skipping.");
+                SharedUpgrades__.Logger.LogWarning($"Late join: timed out waiting for {joiningPlayer.NickName} after {maxWait}s, skipping sync.");
                 yield break;
             }
 
+            SharedUpgrades__.LogVerbose($"{joiningPlayer.NickName} ({steamID}) is ready, starting sync.");
             yield return SyncService.ApplyTeamSnapshot(avatar, steamID, teamSnapshot);
         }
     }
