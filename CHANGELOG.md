@@ -1,3 +1,9 @@
+## 1.3.1
+
+- **Added:** Extensive logging, along with a toggle to increase or decrease logging
+
+---
+
 ## 1.3.0
 
 - **Changed:** Late join sync now simulates per-level chance rather than a single all-or-nothing roll — late joiners receive a realistic spread instead of full upgrades or none
