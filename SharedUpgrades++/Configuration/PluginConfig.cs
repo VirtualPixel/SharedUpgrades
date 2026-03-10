@@ -2,6 +2,13 @@
 
 namespace SharedUpgrades__.Configuration
 {
+    public enum VerbosityLevel
+    {
+        Off = 0,
+        Debug = 1,
+        Verbose = 2
+    }
+
     internal static class PluginConfig
     {
         public static ConfigEntry<bool> EnableSharedUpgrades = null!;
@@ -10,6 +17,7 @@ namespace SharedUpgrades__.Configuration
         public static ConfigEntry<bool> EnableModdedUpgrades = null!;
         public static ConfigEntry<bool> EnableSharedUpgradeHeal = null!;
         public static ConfigEntry<bool> EnableShareNotification = null!;
+        public static ConfigEntry<VerbosityLevel> LoggingLevel = null!;
         public static ConfigFile? ConfigFile;
 
         public static void Init(ConfigFile config)
@@ -59,6 +67,13 @@ namespace SharedUpgrades__.Configuration
                 "EnableShareNotification",
                 true,
                 "Provide a visual effect when upgrades are shared with you"
+            );
+
+            LoggingLevel = config.Bind<VerbosityLevel>(
+                "General",
+                "LogLevel",
+                VerbosityLevel.Off,
+                "Off: key events only (sync start/result, purchases). Debug: per-player distribution results and skips. Verbose: full trace of every step."
             );
         }
     }
