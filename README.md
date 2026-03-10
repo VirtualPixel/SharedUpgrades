@@ -25,6 +25,7 @@ Share upgrades with your whole team in R.E.P.O.
 | Shared Upgrades Chance | `100` | % chance per upgrade level to be shared with each player |
 | Late Join Sync | `true` | Sync upgrades to players who join mid-run |
 | Enable Modded Upgrades | `true` | Sync upgrades added by other mods |
+| Log Level | `Off`, `Debug`, `Verbose` | Verbosity of logging within the terminal |
 
 **Effects**
 

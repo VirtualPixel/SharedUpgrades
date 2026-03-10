@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SharedUpgrades__.Patches
 {
@@ -24,7 +26,7 @@ namespace SharedUpgrades__.Patches
             if (_itemToggle.GetValue(instance) is not ItemToggle { toggleState: true } toggle)
                 return null;
 
-            viewID = (int)_playerTogglePhotonId.GetValue(toggle); 
+            viewID = (int)_playerTogglePhotonId.GetValue(toggle);
             return SemiFunc.PlayerAvatarGetFromPhotonID(viewID);
         }
 
@@ -37,7 +39,11 @@ namespace SharedUpgrades__.Patches
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
 
             PlayerAvatar? avatar = GetUpgradePlayer(__instance, out int viewID);
-            if (avatar is null) return;
+            if (avatar is null)
+            {
+                SharedUpgrades__.LogVerbose("[Purchase] upgrade interaction fired but couldn't find a player, skipping.");
+                return;
+            }
 
             string steamID = (string)_steamID.GetValue(avatar);
             if (string.IsNullOrEmpty(steamID)) return;
@@ -45,6 +51,8 @@ namespace SharedUpgrades__.Patches
             string? itemName = null;
             if (_itemAttributes.GetValue(__instance) is ItemAttributes attrs && attrs.item != null)
                 itemName = attrs.item.name;
+
+            SharedUpgrades__.LogVerbose($"[Purchase] {avatar.playerName} is buying '{itemName}'");
 
             // Track upgrade levels before the purchase goes through
             __state = new UpgradeContext
@@ -63,6 +71,8 @@ namespace SharedUpgrades__.Patches
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
             if (__state is null) return;
 
+            SharedUpgrades__.LogVerbose($"[Purchase] checking what {__state.PlayerName} just bought (item='{__state.ItemName}')");
+
             bool distributed = false;
             var playerUpgrades = StatsManager.instance.dictionaryOfDictionaries.Where(key => RegistryService.Instance.IsRegistered(key.Key));
 
@@ -71,37 +81,45 @@ namespace SharedUpgrades__.Patches
                 kvp.Value.TryGetValue(__state.SteamID, out int currentValue);
                 __state.LevelsBefore.TryGetValue(kvp.Key, out int previousValue);
 
+                SharedUpgrades__.LogVerbose($"[Purchase]   {kvp.Key}: {previousValue} → {currentValue}");
+
                 if (currentValue <= previousValue) continue;
                 int difference = currentValue - previousValue;
 
                 distributed = true;
-                SharedUpgrades__.Logger.LogInfo($"{__state.PlayerName} purchased {kvp.Key} (+{difference}), distributing...");
-                DistributionService.DistributeUpgrade
-                    (
-                        context: __state,
-                        upgradeKey: kvp.Key,
-                        difference: difference,
-                        currentValue: currentValue
-                    );
+                SharedUpgrades__.LogAlways($"[Purchase] {__state.PlayerName} bought {kvp.Key} (+{difference}), distributing...");
+                DistributionService.DistributeUpgrade(
+                    context: __state,
+                    upgradeKey: kvp.Key,
+                    difference: difference,
+                    currentValue: currentValue
+                );
             }
 
-            // Match the item name against registered modded upgrades to identify the purchase.
+            SharedUpgrades__.LogVerbose($"[Purchase] vanilla scan done, distributed={distributed}");
+
+            // Match the item name against registered modded upgrades to identify the purchase
             if (!distributed && __state.ItemName != null && ConfigService.IsModdedUpgradesEnabled())
             {
+                SharedUpgrades__.LogVerbose($"[Purchase] no vanilla upgrades changed — checking modded match for '{__state.ItemName}'");
+
                 string? matchedKey = MatchItemNameToModdedUpgrade(__state.ItemName);
                 if (matchedKey != null)
                 {
                     __state.LevelsBefore.TryGetValue(matchedKey, out int prevLevel);
                     int newLevel = prevLevel + 1;
 
-                    SharedUpgrades__.Logger.LogInfo($"{__state.PlayerName} purchased {matchedKey} (+1), distributing...");
-                    DistributionService.DistributeUpgrade
-                        (
-                            context: __state,
-                            upgradeKey: matchedKey,
-                            difference: 1,
-                            currentValue: newLevel
-                        );
+                    SharedUpgrades__.LogInfo($"[Purchase] {__state.PlayerName} ({__state.SteamID}) bought modded {matchedKey} (+1), distributing...");
+                    DistributionService.DistributeUpgrade(
+                        context: __state,
+                        upgradeKey: matchedKey,
+                        difference: 1,
+                        currentValue: newLevel
+                    );
+                }
+                else
+                {
+                    SharedUpgrades__.LogVerbose($"[Purchase] no match for '{__state.ItemName}', nothing to distribute.");
                 }
             }
         }

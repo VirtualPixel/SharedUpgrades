@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using SharedUpgrades__.Services;
 using UnityEngine;
 
@@ -12,7 +12,12 @@ namespace SharedUpgrades__.Patches
         [HarmonyPostfix]
         public static void Postfix(StatsManager __instance)
         {
+            SharedUpgrades__.LogVerbose("StatsManager.Start — discovering upgrades.");
+
             var discovered = DiscoveryService.DiscoveredUpgrades(__instance);
+
+            SharedUpgrades__.LogVerbose($"Found {discovered.Vanilla.Count} vanilla and {discovered.Modded.Count} modded upgrade(s).");
+
             RegistryService.Instance.Clear();
             RegistryService.Instance.RegisterAll(discovered);
             ConfigService.LoadModsIntoConfig();
@@ -23,6 +28,11 @@ namespace SharedUpgrades__.Patches
                 _callbackService = go.AddComponent<NetworkCallbackService>();
                 go.AddComponent<WatermarkService>();
                 Object.DontDestroyOnLoad(go);
+                SharedUpgrades__.LogVerbose("Created NetworkCallbackService and WatermarkService.");
+            }
+            else
+            {
+                SharedUpgrades__.LogVerbose("NetworkCallbackService already exists, skipping.");
             }
         }
     }
