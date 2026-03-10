@@ -1,5 +1,6 @@
 ## 1.3.1
 
+- **Fixed:** Late join sync could give the joining player more upgrades than teammates had — caused by the joining player's own save data inflating the team snapshot and a race condition with the game's stat initialization
 - **Added:** Extensive logging, along with a toggle to increase or decrease logging
 
 ---

@@ -32,5 +32,5 @@ Compress-Archive -Path $files.FullName -DestinationPath $zipPath -Force
 Write-Host "Packaged v$Version -> $zipPath"
 
 # Clear BepInEx log for a clean test run (silently skip if locked)
-try { [System.IO.File]::WriteAllText("$env:APPDATA\Thunderstore Mod Manager\DataFolder\REPO\profiles\Development\BepInEx\LogOutput.log", "", $enc) }
+try { [System.IO.File]::WriteAllText("$env:APPDATA\com.kesomannen.gale\repo\profiles\Development\BepInEx\LogOutput.log", "", $enc) }
 catch { }

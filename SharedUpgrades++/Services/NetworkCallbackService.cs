@@ -46,13 +46,12 @@ namespace SharedUpgrades__.Services
             if (!IsActiveRun())
             {
                 _pendingSync.Add(newPlayer);
-                SharedUpgrades__.LogInfo($"Deferred sync: {newPlayer.NickName} joined outside of a level, queued. ({_pendingSync.Count} pending)");
+                SharedUpgrades__.LogAlways($"Deferred sync: {newPlayer.NickName} joined outside of a level, queued. ({_pendingSync.Count} pending)");
                 return;
             }
 
-            var teamSnapshot = SnapshotService.SnapshotTeamMaxLevels();
-            SharedUpgrades__.LogVerbose($"Starting immediate sync for {newPlayer.NickName} ({teamSnapshot.Count} upgrade(s) in snapshot).");
-            StartCoroutine(WaitAndSync(newPlayer, teamSnapshot));
+            SharedUpgrades__.LogVerbose($"Starting immediate sync for {newPlayer.NickName}.");
+            StartCoroutine(WaitAndSync(newPlayer));
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -92,23 +91,25 @@ namespace SharedUpgrades__.Services
             if (!ConfigService.IsLateJoinSyncEnabled() || !ConfigService.IsSharedUpgradesEnabled()) return;
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
 
-            var teamSnapshot = SnapshotService.SnapshotTeamMaxLevels();
-
-            SharedUpgrades__.LogInfo($"Deferred sync: {scene.name} loaded, processing {_pendingSync.Count} queued player(s).");
+            SharedUpgrades__.LogAlways($"Deferred sync: {scene.name} loaded, processing {_pendingSync.Count} queued player(s).");
 
             foreach (var player in _pendingSync)
             {
                 SharedUpgrades__.LogVerbose($"Starting deferred sync for {player.NickName}.");
-                StartCoroutine(WaitAndSync(player, teamSnapshot));
+                StartCoroutine(WaitAndSync(player));
             }
 
             _pendingSync.Clear();
         }
 
-        private IEnumerator WaitAndSync(Player joiningPlayer, Dictionary<string, int> teamSnapshot)
+        private IEnumerator WaitAndSync(Player joiningPlayer)
         {
             const float maxWait = 12f;
             const float checkInterval = 0.3f;
+            // Extra wait after the readiness check passes. playerUpgradeStrength being present
+            // signals the avatar is ready, but the game may still be mid-sync for other stats.
+            // This gives the base game time to finish before we snapshot and apply.
+            const float stabilizationDelay = 2f;
             float elapsed = 0f;
 
             PlayerAvatar? avatar = null;
@@ -148,7 +149,10 @@ namespace SharedUpgrades__.Services
                 yield break;
             }
 
-            SharedUpgrades__.LogVerbose($"{joiningPlayer.NickName} ({steamID}) is ready, starting sync.");
+            SharedUpgrades__.LogVerbose($"{joiningPlayer.NickName} ({steamID}) is ready, waiting for stats to stabilize...");
+            yield return new WaitForSeconds(stabilizationDelay);
+            var teamSnapshot = SnapshotService.SnapshotTeamMaxLevels(excludeSteamID: steamID);
+            SharedUpgrades__.LogVerbose($"{joiningPlayer.NickName} — snapshot taken (exclude={steamID}), starting sync.");
             yield return SyncService.ApplyTeamSnapshot(avatar, steamID, teamSnapshot);
         }
     }

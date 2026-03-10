@@ -73,7 +73,7 @@ namespace SharedUpgrades__.Configuration
                 "General",
                 "LogLevel",
                 VerbosityLevel.Off,
-                "Off: startup and errors only. Debug: purchases, distribution results, skips, and late join events. Verbose: full trace of every step."
+                "Off: key events only (sync start/result, purchases). Debug: per-player distribution results and skips. Verbose: full trace of every step."
             );
         }
     }

@@ -31,6 +31,8 @@ namespace SharedUpgrades__
             Logger.LogInfo($"{Info.Metadata.GUID} v{Info.Metadata.Version} has loaded! LogLevel={PluginConfig.LoggingLevel.Value}");
         }
 
+        internal static void LogAlways(string msg) => Logger.LogInfo(msg);
+
         internal static void LogInfo(string msg)
         {
             if (ConfigService.IsDebugLoggingEnabled())
