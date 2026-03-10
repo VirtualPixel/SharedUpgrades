@@ -28,7 +28,7 @@ namespace SharedUpgrades__.Services
             string playerName = (string)_playerName.GetValue(player);
 
             int chance = ConfigService.SharedUpgradesChancePercentage();
-            SharedUpgrades__.LogInfo($"[LateJoin] syncing {playerName} — {teamSnapshot.Count} upgrade(s), chance={chance}%");
+            SharedUpgrades__.LogAlways($"[LateJoin] syncing {playerName} — {teamSnapshot.Count} upgrade(s), chance={chance}%");
 
             int sent = 0;
             int skipped = 0;
@@ -100,7 +100,7 @@ namespace SharedUpgrades__.Services
                 sent++;
             }
 
-            SharedUpgrades__.LogInfo($"[LateJoin] done — {playerName}: sent={sent}, skipped={skipped}");
+            SharedUpgrades__.LogAlways($"[LateJoin] done — {playerName}: sent={sent}, skipped={skipped}");
         }
 
         private static int SimulateRealisticLevelling(int value)

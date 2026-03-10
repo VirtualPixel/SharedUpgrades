@@ -87,7 +87,7 @@ namespace SharedUpgrades__.Patches
                 int difference = currentValue - previousValue;
 
                 distributed = true;
-                SharedUpgrades__.LogInfo($"[Purchase] {__state.PlayerName} bought {kvp.Key} (+{difference}), distributing...");
+                SharedUpgrades__.LogAlways($"[Purchase] {__state.PlayerName} bought {kvp.Key} (+{difference}), distributing...");
                 DistributionService.DistributeUpgrade(
                     context: __state,
                     upgradeKey: kvp.Key,

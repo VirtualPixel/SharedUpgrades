@@ -18,7 +18,7 @@ namespace SharedUpgrades__.Services
             return result;
         }
 
-        public static Dictionary<string, int> SnapshotTeamMaxLevels()
+        public static Dictionary<string, int> SnapshotTeamMaxLevels(string? excludeSteamID = null)
         {
             Dictionary<string, int> result = [];
             if (StatsManager.instance is null) return result;
@@ -26,10 +26,13 @@ namespace SharedUpgrades__.Services
             foreach (var kvp in StatsManager.instance.dictionaryOfDictionaries
                 .Where(k => RegistryService.Instance.IsRegistered(k.Key)))
             {
-                result[kvp.Key] = kvp.Value.Values.DefaultIfEmpty(0).Max();
+                var values = string.IsNullOrEmpty(excludeSteamID)
+                    ? kvp.Value.Values
+                    : kvp.Value.Where(p => p.Key != excludeSteamID).Select(p => p.Value);
+                result[kvp.Key] = values.DefaultIfEmpty(0).Max();
             }
 
-            SharedUpgrades__.LogVerbose($"[Snapshot] Team snapshot — {result.Count} upgrade(s).");
+            SharedUpgrades__.LogVerbose($"[Snapshot] Team snapshot (exclude={excludeSteamID ?? "none"}) — {result.Count} upgrade(s).");
             return result;
         }
     }

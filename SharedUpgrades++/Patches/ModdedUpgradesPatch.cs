@@ -65,7 +65,7 @@ namespace SharedUpgrades__.Patches
             }
 
             string playerName = (string)_playerName.GetValue(player);
-            SharedUpgrades__.LogInfo($"[ModdedPatch] {playerName} bought {dictionaryName}, distributing...");
+            SharedUpgrades__.LogAlways($"[ModdedPatch] {playerName} bought {dictionaryName}, distributing...");
 
             var context = new UpgradeContext(
                 steamID: key,
