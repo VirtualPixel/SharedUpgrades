@@ -64,7 +64,3 @@ SharedUpgradesPlus is feature complete. No active development planned — but if
 <a href="https://ko-fi.com/vippydev" target="_blank">
 <img src="https://storage.ko-fi.com/cdn/brandasset/v2/support_me_on_kofi_dark.png" alt="Ko-Fi" width="200px"/>
 </a>
-
----
-
-*Also known as SharedUpgrades+ and SharedUpgrades++*

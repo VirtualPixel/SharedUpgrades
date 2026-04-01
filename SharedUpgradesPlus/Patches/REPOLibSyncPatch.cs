@@ -19,8 +19,7 @@ namespace SharedUpgradesPlus.Patches
         {
             if (_playerDictionaryField == null || _playerUpgradesField == null || StatsManager.instance == null) return;
 
-            var playerUpgrades = _playerUpgradesField.GetValue(null) as IDictionary;
-            if (playerUpgrades == null) return;
+            if (_playerUpgradesField.GetValue(null) is not IDictionary playerUpgrades) return;
 
             SharedUpgradesPlus.LogVerbose($"Syncing {playerUpgrades.Count} REPOLib upgrade(s) to StatsManager.");
 

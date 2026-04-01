@@ -10,7 +10,7 @@ namespace SharedUpgradesPlus.Models
             get
             {
                 return Name.StartsWith("playerUpgrade") 
-                    ? Name.Substring("playerUpgrade".Length)
+                    ? Name["playerUpgrade".Length..]
                     : Name;
             }
         }
