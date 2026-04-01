@@ -24,7 +24,7 @@ namespace SharedUpgradesPlus.Patches
 
             if (_callbackService == null)
             {
-                var go = new GameObject("NetworkCallbackService");
+                var go = new GameObject("SharedUpgradesPlus_Services");
                 _callbackService = go.AddComponent<NetworkCallbackService>();
                 go.AddComponent<WatermarkService>();
                 Object.DontDestroyOnLoad(go);
