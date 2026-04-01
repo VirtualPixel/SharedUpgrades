@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 
-namespace SharedUpgrades__.Patches
+namespace SharedUpgradesPlus.Patches
 {
     [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.RunStartStats))]
     internal class REPOLibSyncPatch
@@ -22,7 +22,7 @@ namespace SharedUpgrades__.Patches
             var playerUpgrades = _playerUpgradesField.GetValue(null) as IDictionary;
             if (playerUpgrades == null) return;
 
-            SharedUpgrades__.LogVerbose($"Syncing {playerUpgrades.Count} REPOLib upgrade(s) to StatsManager.");
+            SharedUpgradesPlus.LogVerbose($"Syncing {playerUpgrades.Count} REPOLib upgrade(s) to StatsManager.");
 
             int synced = 0;
             foreach (DictionaryEntry entry in playerUpgrades)
@@ -34,11 +34,11 @@ namespace SharedUpgrades__.Patches
                 if (!StatsManager.instance.dictionaryOfDictionaries.TryGetValue(fullKey, out var upgradeDict)) continue;
 
                 _playerDictionaryField.SetValue(entry.Value, upgradeDict);
-                SharedUpgrades__.LogInfo($"Synced PlayerDictionary for {fullKey}.");
+                SharedUpgradesPlus.LogInfo($"Synced PlayerDictionary for {fullKey}.");
                 synced++;
             }
 
-            SharedUpgrades__.LogVerbose($"REPOLib sync done — {synced}/{playerUpgrades.Count} upgrade(s).");
+            SharedUpgradesPlus.LogVerbose($"REPOLib sync done — {synced}/{playerUpgrades.Count} upgrade(s).");
         }
     }
 }

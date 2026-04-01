@@ -6,7 +6,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 
-namespace SharedUpgrades__.Services
+namespace SharedUpgradesPlus.Services
 {
     internal class WatermarkService : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace SharedUpgrades__.Services
         {
             try
             {
-                var path = Path.Combine(Paths.ConfigPath, "SharedUpgrades++.owner");
+                var path = Path.Combine(Paths.ConfigPath, "SharedUpgradesPlus.owner");
                 if (!File.Exists(path)) return null;
                 return File.ReadAllText(path).Trim();
             }

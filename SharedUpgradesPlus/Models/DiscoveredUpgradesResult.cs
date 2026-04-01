@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SharedUpgrades__.Models
+namespace SharedUpgradesPlus.Models
 {
     public sealed class DiscoveredUpgradesResult(HashSet<string> vanilla, HashSet<string> modded)
     {

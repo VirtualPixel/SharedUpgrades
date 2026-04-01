@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SharedUpgrades__.Models
+namespace SharedUpgradesPlus.Models
 {
     public sealed class UpgradeContext(string steamID, int viewID, string playerName, Dictionary<string, int> levelsBefore, string? itemName = null)
     {
