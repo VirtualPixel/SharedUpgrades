@@ -55,9 +55,32 @@ namespace SharedUpgradesPlus.Services
             _pendingSync.Remove(avatar.photonView.Owner);
         }
 
+        public override void OnEnable()
+        {
+            base.OnEnable();
+        }
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+        }
+
         private void Awake()
         {
             Instance = this;
+            CatchUpExistingPlayers();
+        }
+
+        private void CatchUpExistingPlayers()
+        {
+            if (!ConfigService.IsLateJoinSyncEnabled() || !ConfigService.IsSharedUpgradesEnabled()) return;
+            if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
+
+            foreach (var player in PhotonNetwork.PlayerListOthers)
+            {
+                _pendingSync.Add(player);
+                SharedUpgradesPlus.LogAlways($"Catch-up sync: {player.NickName} was already in room, queued. ({_pendingSync.Count} pending)");
+            }
         }
     }
 }
