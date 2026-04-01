@@ -1,17 +1,13 @@
-using HarmonyLib;
 using Photon.Pun;
 using SharedUpgradesPlus.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace SharedUpgradesPlus.Services
 {
     public static class SyncService
     {
-        private static readonly FieldInfo _playerName = AccessTools.Field(typeof(PlayerAvatar), "playerName");
-
         public static IEnumerator ApplyTeamSnapshot(PlayerAvatar player, string steamID, Dictionary<string, int> teamSnapshot)
         {
             if (StatsManager.instance == null || PunManager.instance == null) yield break;
@@ -23,7 +19,7 @@ namespace SharedUpgradesPlus.Services
                 yield break;
             }
 
-            string playerName = (string)_playerName.GetValue(player);
+            string playerName = player.playerName;
 
             int chance = ConfigService.SharedUpgradesChancePercentage();
             SharedUpgradesPlus.LogAlways($"[LateJoin] syncing {playerName} — {teamSnapshot.Count} upgrade(s), chance={chance}%");
