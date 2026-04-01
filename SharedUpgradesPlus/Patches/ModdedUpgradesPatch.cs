@@ -1,17 +1,13 @@
 using HarmonyLib;
 using Photon.Pun;
-using SharedUpgrades__.Models;
-using SharedUpgrades__.Services;
-using System.Collections.Generic;
-using System.Reflection;
+using SharedUpgradesPlus.Models;
+using SharedUpgradesPlus.Services;
 
-namespace SharedUpgrades__.Patches
+namespace SharedUpgradesPlus.Patches
 {
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpdateStatRPC))]
     internal class ModdedUpgradesPatch
     {
-        private static readonly FieldInfo _playerName = AccessTools.Field(typeof(PlayerAvatar), "playerName");
-
         [HarmonyPostfix]
         public static void Postfix(string dictionaryName, string key, int value)
         {
@@ -23,29 +19,29 @@ namespace SharedUpgrades__.Patches
 
             PlayerAvatar player = SemiFunc.PlayerAvatarGetFromSteamID(key);
 
-            SharedUpgrades__.LogVerbose($"[ModdedPatch] {dictionaryName} ({key}) — value={value}, player={player?.playerName ?? "not found"}, distributing={DistributionService.IsDistributing}");
+            SharedUpgradesPlus.LogVerbose($"[ModdedPatch] {dictionaryName} ({key}) — value={value}, player={player?.playerName ?? "not found"}, distributing={DistributionService.IsDistributing}");
 
             // Visual effects (all clients)
             if (player != null && ConfigService.IsShareNotificationEnabled())
             {
-                SharedUpgrades__.LogVerbose($"[ModdedPatch] running effects for {player.playerName}");
+                SharedUpgradesPlus.LogVerbose($"[ModdedPatch] running effects for {player.playerName}");
 
                 if (player.isLocal)
                 {
-                    SharedUpgrades__.LogVerbose($"[ModdedPatch] local player, triggering StatsUI + CameraGlitch.");
+                    SharedUpgradesPlus.LogVerbose($"[ModdedPatch] local player, triggering StatsUI + CameraGlitch.");
                     StatsUI.instance.Fetch();
                     StatsUI.instance.ShowStats();
                     CameraGlitch.Instance.PlayUpgrade();
                 }
                 else
                 {
-                    SharedUpgrades__.LogVerbose($"[ModdedPatch] remote player, shaking camera.");
+                    SharedUpgradesPlus.LogVerbose($"[ModdedPatch] remote player, shaking camera.");
                     GameDirector.instance.CameraImpact.ShakeDistance(5f, 1f, 6f, player.transform.position, 0.2f);
                 }
 
                 if (!GameManager.Multiplayer() || PhotonNetwork.IsMasterClient)
                 {
-                    SharedUpgrades__.LogVerbose($"[ModdedPatch] applying upgrade material effect to {player.playerName}.");
+                    SharedUpgradesPlus.LogVerbose($"[ModdedPatch] applying upgrade material effect to {player.playerName}.");
                     player.playerHealth.MaterialEffectOverride(PlayerHealth.Effect.Upgrade);
                 }
             }
@@ -54,24 +50,24 @@ namespace SharedUpgrades__.Patches
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
             if (DistributionService.IsDistributing)
             {
-                SharedUpgrades__.LogVerbose($"[ModdedPatch] already distributing, skipping {dictionaryName}.");
+                SharedUpgradesPlus.LogVerbose($"[ModdedPatch] already distributing, skipping {dictionaryName}.");
                 return;
             }
 
             if (player == null || player.photonView == null)
             {
-                SharedUpgrades__.Logger.LogWarning($"[ModdedPatch] no PlayerAvatar found for {key}, can't distribute {dictionaryName}.");
+                SharedUpgradesPlus.Logger.LogWarning($"[ModdedPatch] no PlayerAvatar found for {key}, can't distribute {dictionaryName}.");
                 return;
             }
 
-            string playerName = (string)_playerName.GetValue(player);
-            SharedUpgrades__.LogAlways($"[ModdedPatch] {playerName} bought {dictionaryName}, distributing...");
+            string playerName = player.playerName;
+            SharedUpgradesPlus.LogAlways($"[ModdedPatch] {playerName} bought {dictionaryName}, distributing...");
 
             var context = new UpgradeContext(
                 steamID: key,
                 viewID: player.photonView.ViewID,
                 playerName: playerName,
-                levelsBefore: new Dictionary<string, int>()
+                levelsBefore: []
             );
 
             // TODO: Update this to support dynamic difference, not hard coded

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharedUpgrades__.Models
+namespace SharedUpgradesPlus.Models
 {
     public sealed class Upgrade(string Name) : IEquatable<Upgrade>
     {
@@ -10,7 +10,7 @@ namespace SharedUpgrades__.Models
             get
             {
                 return Name.StartsWith("playerUpgrade") 
-                    ? Name.Substring("playerUpgrade".Length)
+                    ? Name["playerUpgrade".Length..]
                     : Name;
             }
         }

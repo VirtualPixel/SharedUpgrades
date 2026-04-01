@@ -1,9 +1,9 @@
 using HarmonyLib;
-using SharedUpgrades__.Models;
+using SharedUpgradesPlus.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SharedUpgrades__.Services
+namespace SharedUpgradesPlus.Services
 {
     public static class DiscoveryService
     {

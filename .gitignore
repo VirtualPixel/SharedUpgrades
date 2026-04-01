@@ -26,7 +26,7 @@ Thumbs.db
 packages/
 
 # Local owner identity file (never ship)
-SharedUpgrades++.owner
+SharedUpgradesPlus.owner
 
 # Generated build info
 BuildInfo.g.cs
