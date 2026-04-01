@@ -8,8 +8,8 @@ namespace SharedUpgradesPlus.Services
     {
         public IReadOnlyCollection<Upgrade> VanillaUpgrades => vanillaUpgrades;
         public IReadOnlyCollection<Upgrade> ModdedUpgrades => moddedUpgrades;
-        private HashSet<Upgrade> vanillaUpgrades = null!;
-        private HashSet<Upgrade> moddedUpgrades = null!;
+        private readonly HashSet<Upgrade> vanillaUpgrades = null!;
+        private readonly HashSet<Upgrade> moddedUpgrades = null!;
         private static readonly RegistryService instance = new();
 
         public static RegistryService Instance => instance;
@@ -44,6 +44,6 @@ namespace SharedUpgradesPlus.Services
 
         public bool IsRegistered(string key) => IsVanilla(key) || moddedUpgrades.Any(upgrade => upgrade.Name.Equals(key));
 
-        private Upgrade MakeUpgradeFromKey(string key) => new Upgrade(Name: key);
+        private Upgrade MakeUpgradeFromKey(string key) => new(Name: key);
     }
 }
