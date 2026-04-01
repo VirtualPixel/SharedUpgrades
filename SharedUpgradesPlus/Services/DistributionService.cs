@@ -2,14 +2,12 @@ using HarmonyLib;
 using Photon.Pun;
 using SharedUpgradesPlus.Models;
 using System;
-using System.Reflection;
 
 namespace SharedUpgradesPlus.Services
 {
     public static class DistributionService
     {
         public static bool IsDistributing { get; private set; }
-        private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
 
         public static void DistributeUpgrade(UpgradeContext context, string upgradeKey, int difference, int currentValue)
         {
@@ -52,7 +50,7 @@ namespace SharedUpgradesPlus.Services
                     if (player == null || player.photonView == null) continue;
                     if (player.photonView.ViewID == context.ViewID) continue;
 
-                    string steamID = (string)_steamID.GetValue(player);
+                    string steamID = player.steamID;
                     if (string.IsNullOrEmpty(steamID)) continue;
 
                     int playerLevel = 0;

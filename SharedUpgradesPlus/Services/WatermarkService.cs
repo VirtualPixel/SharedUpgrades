@@ -1,9 +1,7 @@
 using BepInEx;
-using HarmonyLib;
 using Photon.Pun;
 using System.Collections;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 
 namespace SharedUpgradesPlus.Services
@@ -24,8 +22,6 @@ namespace SharedUpgradesPlus.Services
             }
             catch { return null; }
         }
-
-        private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
 
         private bool show;
         private bool polling;
@@ -79,7 +75,7 @@ namespace SharedUpgradesPlus.Services
                     }
 
                     if (localPlayer == null) continue;
-                    if ((string)_steamID.GetValue(localPlayer) != OwnerID) break;
+                    if (localPlayer.steamID != OwnerID) break;
 
                     bool isHost = PhotonNetwork.IsMasterClient;
                     bool modPresent = PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomKey);

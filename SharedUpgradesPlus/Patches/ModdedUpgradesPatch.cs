@@ -2,16 +2,12 @@ using HarmonyLib;
 using Photon.Pun;
 using SharedUpgradesPlus.Models;
 using SharedUpgradesPlus.Services;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace SharedUpgradesPlus.Patches
 {
     [HarmonyPatch(typeof(PunManager), nameof(PunManager.UpdateStatRPC))]
     internal class ModdedUpgradesPatch
     {
-        private static readonly FieldInfo _playerName = AccessTools.Field(typeof(PlayerAvatar), "playerName");
-
         [HarmonyPostfix]
         public static void Postfix(string dictionaryName, string key, int value)
         {
@@ -64,14 +60,14 @@ namespace SharedUpgradesPlus.Patches
                 return;
             }
 
-            string playerName = (string)_playerName.GetValue(player);
+            string playerName = player.playerName;
             SharedUpgradesPlus.LogAlways($"[ModdedPatch] {playerName} bought {dictionaryName}, distributing...");
 
             var context = new UpgradeContext(
                 steamID: key,
                 viewID: player.photonView.ViewID,
                 playerName: playerName,
-                levelsBefore: new Dictionary<string, int>()
+                levelsBefore: []
             );
 
             // TODO: Update this to support dynamic difference, not hard coded

@@ -4,29 +4,20 @@ using SharedUpgradesPlus.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SharedUpgradesPlus.Patches
 {
     [HarmonyPatch(typeof(ItemUpgrade), "PlayerUpgrade")]
     internal class SharedUpgradesPatch
     {
-        private static readonly FieldInfo _itemToggle = AccessTools.Field(typeof(ItemUpgrade), "itemToggle");
-        private static readonly FieldInfo _playerTogglePhotonId = AccessTools.Field(typeof(ItemToggle), "playerTogglePhotonID");
-        private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
-        private static readonly FieldInfo _playerName = AccessTools.Field(typeof(PlayerAvatar), "playerName");
-        private static readonly FieldInfo _itemAttributes = AccessTools.Field(typeof(ItemUpgrade), "itemAttributes");
-
         private static PlayerAvatar? GetUpgradePlayer(ItemUpgrade instance, out int viewID)
         {
             viewID = 0;
 
-            if (_itemToggle.GetValue(instance) is not ItemToggle { toggleState: true } toggle)
+            if (instance.itemToggle is not ItemToggle { toggleState: true })
                 return null;
 
-            viewID = (int)_playerTogglePhotonId.GetValue(toggle);
+            viewID = instance.itemToggle.playerTogglePhotonID;
             return SemiFunc.PlayerAvatarGetFromPhotonID(viewID);
         }
 
@@ -45,11 +36,11 @@ namespace SharedUpgradesPlus.Patches
                 return;
             }
 
-            string steamID = (string)_steamID.GetValue(avatar);
+            string steamID = avatar.steamID;
             if (string.IsNullOrEmpty(steamID)) return;
 
             string? itemName = null;
-            if (_itemAttributes.GetValue(__instance) is ItemAttributes attrs && attrs.item != null)
+            if (__instance.itemAttributes is ItemAttributes attrs && attrs.item != null)
                 itemName = attrs.item.name;
 
             SharedUpgradesPlus.LogVerbose($"[Purchase] {avatar.playerName} is buying '{itemName}'");
@@ -58,7 +49,7 @@ namespace SharedUpgradesPlus.Patches
             __state = new UpgradeContext
             (
                 steamID: steamID,
-                playerName: (string)_playerName.GetValue(avatar),
+                playerName: avatar.playerName,
                 viewID: viewID,
                 levelsBefore: SnapshotService.SnapshotPlayerStats(steamID),
                 itemName: itemName
