@@ -1,9 +1,9 @@
-using SharedUpgrades__.Configuration;
+using SharedUpgradesPlus.Configuration;
 using System.Collections.Generic;
 using BepInEx.Configuration;
-using SharedUpgrades__.Models;
+using SharedUpgradesPlus.Models;
 
-namespace SharedUpgrades__.Services
+namespace SharedUpgradesPlus.Services
 {
     public static class ConfigService
     {

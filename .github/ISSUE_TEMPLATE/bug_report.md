@@ -8,7 +8,7 @@ labels: bug
 
 **What did you expect to happen?**
 
-**BepInEx log** (filter for `SharedUpgrades__`):
+**BepInEx log** (filter for `SharedUpgradesPlus`):
 ```
 paste relevant lines here
 ```

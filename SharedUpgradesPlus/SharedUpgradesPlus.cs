@@ -1,16 +1,16 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using SharedUpgrades__.Configuration;
-using SharedUpgrades__.Services;
+using SharedUpgradesPlus.Configuration;
+using SharedUpgradesPlus.Services;
 using UnityEngine;
 
-namespace SharedUpgrades__
+namespace SharedUpgradesPlus
 {
     [BepInPlugin("Vippy.SharedUpgradesPlus", "SharedUpgradesPlus", BuildInfo.Version)]
-    public class SharedUpgrades__ : BaseUnityPlugin
+    public class SharedUpgradesPlus : BaseUnityPlugin
     {
-        internal static SharedUpgrades__ Instance { get; private set; } = null!;
+        internal static SharedUpgradesPlus Instance { get; private set; } = null!;
         internal new static ManualLogSource Logger => Instance.BaseLogger;
         private ManualLogSource BaseLogger => base.Logger;
         internal Harmony? Harmony { get; set; }
