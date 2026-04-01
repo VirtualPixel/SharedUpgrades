@@ -3,14 +3,13 @@ using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 namespace SharedUpgradesPlus.Services
 {
     public class NetworkCallbackService : MonoBehaviourPunCallbacks
     {
         public static NetworkCallbackService? Instance { get; private set; }
-        private static readonly HashSet<Player> _pendingSync = [];
+        private readonly HashSet<Player> _pendingSync = [];
 
         public override void OnJoinedRoom()
         {
@@ -30,7 +29,7 @@ namespace SharedUpgradesPlus.Services
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
-            SharedUpgradesPlus.LogVerbose($"OnPlayerEnteredRoom: {newPlayer.NickName} (isMaster={SemiFunc.IsMasterClientOrSingleplayer()}, activeRun={IsActiveRun()}, lateJoin={ConfigService.IsLateJoinSyncEnabled()})");
+            SharedUpgradesPlus.LogVerbose($"OnPlayerEnteredRoom: {newPlayer.NickName} (isMaster={SemiFunc.IsMasterClientOrSingleplayer()} lateJoin={ConfigService.IsLateJoinSyncEnabled()})");
 
             if (!ConfigService.IsLateJoinSyncEnabled() || !ConfigService.IsSharedUpgradesEnabled()) return;
             if (!SemiFunc.IsMasterClientOrSingleplayer()) return;
@@ -47,7 +46,7 @@ namespace SharedUpgradesPlus.Services
 
         public static bool IsPlayerPendingSync(Player player)
         {
-            return _pendingSync.Contains(player);
+            return Instance != null && Instance._pendingSync.Contains(player);
         }
 
         public IEnumerator LateSyncPlayer(PlayerAvatar avatar, string steamID, Dictionary<string, int> teamSnapshot)
@@ -59,16 +58,6 @@ namespace SharedUpgradesPlus.Services
         private void Awake()
         {
             Instance = this;
-        }
-
-        private static bool IsActiveRun()
-        {
-            if (RunManager.instance == null) return false;
-            var level = RunManager.instance.levelCurrent;
-            return level != RunManager.instance.levelMainMenu
-                && level != RunManager.instance.levelLobbyMenu
-                && level != RunManager.instance.levelRecording
-                && level != RunManager.instance.levelSplashScreen;
         }
     }
 }

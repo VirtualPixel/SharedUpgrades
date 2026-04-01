@@ -83,11 +83,10 @@ namespace SharedUpgradesPlus.Services
 
                     bool isHost = PhotonNetwork.IsMasterClient;
                     bool modPresent = PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomKey);
-                    object? val;
 
                     if (isHost || modPresent)
                     {
-                        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomKey, out val))
+                        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomKey, out object? val))
                             Version = val as string ?? "UNKNOWN";
                         show = !isHost && modPresent;
                         break;
