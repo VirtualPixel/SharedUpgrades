@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 
-namespace SharedUpgrades__.Configuration
+namespace SharedUpgradesPlus.Configuration
 {
     public enum VerbosityLevel
     {

@@ -1,15 +1,15 @@
-using SharedUpgrades__.Models;
+using SharedUpgradesPlus.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SharedUpgrades__.Services
+namespace SharedUpgradesPlus.Services
 {
     public sealed class RegistryService
     {
         public IReadOnlyCollection<Upgrade> VanillaUpgrades => vanillaUpgrades;
         public IReadOnlyCollection<Upgrade> ModdedUpgrades => moddedUpgrades;
-        private HashSet<Upgrade> vanillaUpgrades = null!;
-        private HashSet<Upgrade> moddedUpgrades = null!;
+        private readonly HashSet<Upgrade> vanillaUpgrades = null!;
+        private readonly HashSet<Upgrade> moddedUpgrades = null!;
         private static readonly RegistryService instance = new();
 
         public static RegistryService Instance => instance;
@@ -25,17 +25,17 @@ namespace SharedUpgrades__.Services
             vanillaUpgrades.UnionWith(result.Vanilla.Select(MakeUpgradeFromKey));
             moddedUpgrades.UnionWith(result.Modded.Select(MakeUpgradeFromKey));
 
-            SharedUpgrades__.Logger.LogInfo($"Discovered {vanillaUpgrades.Count} vanilla and {moddedUpgrades.Count} modded upgrade(s).");
+            SharedUpgradesPlus.Logger.LogInfo($"Discovered {vanillaUpgrades.Count} vanilla and {moddedUpgrades.Count} modded upgrade(s).");
 
             if (result.Vanilla.Count > 0)
-                SharedUpgrades__.LogVerbose($"Vanilla: {string.Join(", ", result.Vanilla)}");
+                SharedUpgradesPlus.LogVerbose($"Vanilla: {string.Join(", ", result.Vanilla)}");
             if (result.Modded.Count > 0)
-                SharedUpgrades__.LogVerbose($"Modded: {string.Join(", ", result.Modded)}");
+                SharedUpgradesPlus.LogVerbose($"Modded: {string.Join(", ", result.Modded)}");
         }
 
         public void Clear()
         {
-            SharedUpgrades__.LogVerbose($"Registry cleared ({vanillaUpgrades.Count} vanilla, {moddedUpgrades.Count} modded).");
+            SharedUpgradesPlus.LogVerbose($"Registry cleared ({vanillaUpgrades.Count} vanilla, {moddedUpgrades.Count} modded).");
             vanillaUpgrades.Clear();
             moddedUpgrades.Clear();
         }
@@ -44,6 +44,6 @@ namespace SharedUpgrades__.Services
 
         public bool IsRegistered(string key) => IsVanilla(key) || moddedUpgrades.Any(upgrade => upgrade.Name.Equals(key));
 
-        private Upgrade MakeUpgradeFromKey(string key) => new Upgrade(Name: key);
+        private Upgrade MakeUpgradeFromKey(string key) => new(Name: key);
     }
 }

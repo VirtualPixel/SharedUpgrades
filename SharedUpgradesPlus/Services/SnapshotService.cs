@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SharedUpgrades__.Services
+namespace SharedUpgradesPlus.Services
 {
     public static class SnapshotService
     {
@@ -14,7 +14,7 @@ namespace SharedUpgrades__.Services
                 .Where(kvp => RegistryService.Instance.IsRegistered(kvp.Key))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.GetValueOrDefault(steamID, 0));
 
-            SharedUpgrades__.LogVerbose($"[Snapshot] Player snapshot for {steamID} — {result.Count} upgrade(s).");
+            SharedUpgradesPlus.LogVerbose($"[Snapshot] Player snapshot for {steamID} — {result.Count} upgrade(s).");
             return result;
         }
 
@@ -32,7 +32,7 @@ namespace SharedUpgrades__.Services
                 result[kvp.Key] = values.DefaultIfEmpty(0).Max();
             }
 
-            SharedUpgrades__.LogVerbose($"[Snapshot] Team snapshot (exclude={excludeSteamID ?? "none"}) — {result.Count} upgrade(s).");
+            SharedUpgradesPlus.LogVerbose($"[Snapshot] Team snapshot (exclude={excludeSteamID ?? "none"}) — {result.Count} upgrade(s).");
             return result;
         }
     }

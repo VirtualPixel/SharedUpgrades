@@ -1,3 +1,10 @@
+## 1.3.2
+
+- **Fixed:** Updated Late Join Sync functionality, it no longer has an arbitrary 12 second timeout. This was replaced with a patch that runs after each player is ready.
+- **Changed:** Replaced Reflection usage around the code base with calls using the publicizer
+
+---
+
 ## 1.3.1
 
 - **Fixed:** Late join sync could give the joining player more upgrades than teammates had — caused by the joining player's own save data inflating the team snapshot and a race condition with the game's stat initialization

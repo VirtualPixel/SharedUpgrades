@@ -1,12 +1,10 @@
 using BepInEx;
-using HarmonyLib;
 using Photon.Pun;
 using System.Collections;
 using System.IO;
-using System.Reflection;
 using UnityEngine;
 
-namespace SharedUpgrades__.Services
+namespace SharedUpgradesPlus.Services
 {
     internal class WatermarkService : MonoBehaviour
     {
@@ -18,14 +16,12 @@ namespace SharedUpgrades__.Services
         {
             try
             {
-                var path = Path.Combine(Paths.ConfigPath, "SharedUpgrades++.owner");
+                var path = Path.Combine(Paths.ConfigPath, "SharedUpgradesPlus.owner");
                 if (!File.Exists(path)) return null;
                 return File.ReadAllText(path).Trim();
             }
             catch { return null; }
         }
-
-        private static readonly FieldInfo _steamID = AccessTools.Field(typeof(PlayerAvatar), "steamID");
 
         private bool show;
         private bool polling;
@@ -79,15 +75,14 @@ namespace SharedUpgrades__.Services
                     }
 
                     if (localPlayer == null) continue;
-                    if ((string)_steamID.GetValue(localPlayer) != OwnerID) break;
+                    if (localPlayer.steamID != OwnerID) break;
 
                     bool isHost = PhotonNetwork.IsMasterClient;
                     bool modPresent = PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(RoomKey);
-                    object? val;
 
                     if (isHost || modPresent)
                     {
-                        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomKey, out val))
+                        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomKey, out object? val))
                             Version = val as string ?? "UNKNOWN";
                         show = !isHost && modPresent;
                         break;
