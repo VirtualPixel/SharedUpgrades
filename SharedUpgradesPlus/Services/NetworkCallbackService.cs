@@ -55,16 +55,6 @@ namespace SharedUpgradesPlus.Services
             _pendingSync.Remove(avatar.photonView.Owner);
         }
 
-        public override void OnEnable()
-        {
-            base.OnEnable();
-        }
-
-        public override void OnDisable()
-        {
-            base.OnDisable();
-        }
-
         private void Awake()
         {
             Instance = this;

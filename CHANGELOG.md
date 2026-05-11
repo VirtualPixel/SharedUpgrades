@@ -1,3 +1,22 @@
+## 1.4.1
+
+- **Fixed:** Modded upgrades weren't being detected on R.E.P.O. v0.4 — the mod thought there were zero modded upgrades to share, so things like MoreUpgrades' Sprint Usage or Map Zoom silently never distributed. Discovery now picks them up correctly, and also reads REPOLib's API directly as a backup in case the key prefix changes again the way MoreUpgrades 1.6.7 did.
+
+---
+
+## 1.4.0
+
+- **Fixed:** Modded upgrade sharing was snapping teammates to the host's full upgrade level instead of giving them the same +1 the host just bought. A friend with no magnet upgrades would jump straight to wherever the host happened to be sitting. Teammates now gain the same amount the host did, the way vanilla sharing has always worked.
+
+---
+
+## 1.3.3
+
+- **Updated:** Rebuilt for R.E.P.O. v0.4. 1.3.2 will not load on v0.4 — the stats container changed type internally (`Dictionary` → `SortedDictionary`), which is a binary break even though the mod's source did not need to change
+- **Note:** v0.4 adds an in-world UpgradeStand kiosk and an auto-strip rule for stat keys prefixed `playerUpgrade*`. If upgrades disappear or stand purchases don't sync, open an issue with your config and BepInEx log
+
+---
+
 ## 1.3.2
 
 - **Fixed:** Updated Late Join Sync functionality, it no longer has an arbitrary 12 second timeout. This was replaced with a patch that runs after each player is ready.

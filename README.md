@@ -4,6 +4,8 @@ Share upgrades with your whole team in R.E.P.O.
 
 **HOST ONLY** — only the host needs this installed. Your friends play completely vanilla.
 
+> **v1.4.1 — modded upgrade discovery fix.** Modded upgrades weren't being detected on R.E.P.O. v0.4 so sharing them silently did nothing. Now they are, and combined with 1.4.0's level-snap fix, modded sharing works the same as vanilla.
+
 ---
 
 ## Features

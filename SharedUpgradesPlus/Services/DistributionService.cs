@@ -8,7 +8,7 @@ namespace SharedUpgradesPlus.Services
     {
         public static bool IsDistributing { get; private set; }
 
-        public static void DistributeUpgrade(UpgradeContext context, string upgradeKey, int difference, int currentValue)
+        public static void DistributeUpgrade(UpgradeContext context, string upgradeKey, int difference)
         {
             SharedUpgradesPlus.LogVerbose($"[Distribute] {context.PlayerName} bought {upgradeKey} (+{difference})");
 
@@ -72,18 +72,19 @@ namespace SharedUpgradesPlus.Services
                         continue;
                     }
 
+                    int newLevel = playerLevel + difference;
+                    SharedUpgradesPlus.LogAlways($"[Distribute]   {player.playerName}: {playerLevel} → {newLevel} (+{difference})");
+
                     if (isVanilla)
                     {
-                        SharedUpgradesPlus.LogVerbose($"[Distribute]   sending TesterUpgradeCommandRPC to {player.playerName}");
                         photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, upgradeSuffix, difference);
                     }
                     else
                     {
-                        SharedUpgradesPlus.LogVerbose($"[Distribute]   sending UpdateStatRPC to {player.playerName}");
-                        photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, currentValue);
+                        // Send the teammate's new total, not the host's — otherwise teammates snap to host's level.
+                        photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, newLevel);
                     }
 
-                    SharedUpgradesPlus.LogInfo($"[Distribute]   sent {upgradeKey} (+{difference}) to {player.playerName}.");
                     sent++;
                 }
             }

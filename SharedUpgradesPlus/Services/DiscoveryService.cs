@@ -21,6 +21,14 @@ namespace SharedUpgradesPlus.Services
                     moddedUpgrades.Add(key);
             }
 
+            // Also pull from REPOLib's API in case dict-population is late
+            // or the key prefix changes again like MoreUpgrades 1.6.7 did.
+            foreach (var key in RepoLibInterop.GetModdedUpgradeKeys())
+            {
+                if (!vanillaUpgrades.Contains(key))
+                    moddedUpgrades.Add(key);
+            }
+
             return new DiscoveredUpgradesResult(vanilla: vanillaUpgrades, modded: moddedUpgrades);
         }
     }

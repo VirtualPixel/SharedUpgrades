@@ -82,8 +82,7 @@ namespace SharedUpgradesPlus.Patches
                 DistributionService.DistributeUpgrade(
                     context: __state,
                     upgradeKey: kvp.Key,
-                    difference: difference,
-                    currentValue: currentValue
+                    difference: difference
                 );
             }
 
@@ -97,15 +96,11 @@ namespace SharedUpgradesPlus.Patches
                 string? matchedKey = MatchItemNameToModdedUpgrade(__state.ItemName);
                 if (matchedKey != null)
                 {
-                    __state.LevelsBefore.TryGetValue(matchedKey, out int prevLevel);
-                    int newLevel = prevLevel + 1;
-
                     SharedUpgradesPlus.LogInfo($"[Purchase] {__state.PlayerName} ({__state.SteamID}) bought modded {matchedKey} (+1), distributing...");
                     DistributionService.DistributeUpgrade(
                         context: __state,
                         upgradeKey: matchedKey,
-                        difference: 1,
-                        currentValue: newLevel
+                        difference: 1
                     );
                 }
                 else

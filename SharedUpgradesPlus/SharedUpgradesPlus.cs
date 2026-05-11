@@ -50,10 +50,5 @@ namespace SharedUpgradesPlus
             Harmony ??= new Harmony(Info.Metadata.GUID);
             Harmony.PatchAll();
         }
-
-        internal void Unpatch()
-        {
-            Harmony?.UnpatchSelf();
-        }
     }
 }
