@@ -22,7 +22,7 @@ namespace SharedUpgradesPlus.Services
             string playerName = player.playerName;
 
             int chance = ConfigService.SharedUpgradesChancePercentage();
-            SharedUpgradesPlus.LogAlways($"[LateJoin] syncing {playerName} — {teamSnapshot.Count} upgrade(s), chance={chance}%");
+            SharedUpgradesPlus.LogAlways($"[LateJoin] syncing {playerName}: {teamSnapshot.Count} upgrade(s), chance={chance}%");
 
             int sent = 0;
             int skipped = 0;
@@ -32,18 +32,18 @@ namespace SharedUpgradesPlus.Services
                 int upgradeLimit = ConfigService.UpgradeShareLimit(kvp.Key);
                 bool isVanilla = RegistryService.Instance.IsVanilla(kvp.Key);
 
-                SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key} — teamMax={kvp.Value}, isVanilla={isVanilla}, limit={upgradeLimit}");
+                SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key}: teamMax={kvp.Value}, isVanilla={isVanilla}, limit={upgradeLimit}");
 
                 // If modded upgrade and modded upgrades are disabled, skip it
                 if (!isVanilla && !ConfigService.IsModdedUpgradesEnabled())
                 {
-                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key} — skipped (modded upgrades disabled).");
+                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key}: skipped (modded upgrades disabled).");
                     skipped++;
                     continue;
                 }
                 if (!ConfigService.IsUpgradeEnabled(kvp.Key))
                 {
-                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key} — skipped (disabled in config).");
+                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key}: skipped (disabled in config).");
                     skipped++;
                     continue;
                 }
@@ -55,7 +55,7 @@ namespace SharedUpgradesPlus.Services
 
                 if (upgradeLimit > 0 && upgradeLimit <= playerLevel)
                 {
-                    SharedUpgradesPlus.LogInfo($"[LateJoin]   {kvp.Key} — {playerName} hit share limit ({upgradeLimit}), skipping.");
+                    SharedUpgradesPlus.LogInfo($"[LateJoin]   {kvp.Key}: {playerName} hit share limit ({upgradeLimit}), skipping.");
                     skipped++;
                     continue;
                 }
@@ -67,26 +67,26 @@ namespace SharedUpgradesPlus.Services
                 if (upgradeLimit > 0)
                     difference = Math.Min(difference, upgradeLimit - playerLevel);
 
-                SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key} — level={playerLevel}, teamMax={kvp.Value}, diff={difference} (pre-roll)");
+                SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key}: level={playerLevel}, teamMax={kvp.Value}, diff={difference} (pre-roll)");
 
                 difference = SimulateRealisticLevelling(difference);
                 value = playerLevel + difference;
 
                 if (difference <= 0)
                 {
-                    SharedUpgradesPlus.LogInfo($"[LateJoin]   {kvp.Key} — rolled 0 after chance simulation, skipping.");
+                    SharedUpgradesPlus.LogInfo($"[LateJoin]   {kvp.Key}: rolled 0 after chance simulation, skipping.");
                     skipped++;
                     continue;
                 }
 
                 if (isVanilla)
                 {
-                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key} — sending TesterUpgradeCommandRPC to {playerName}");
+                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key}: sending TesterUpgradeCommandRPC to {playerName}");
                     photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, new Upgrade(kvp.Key).CleanName, difference);
                 }
                 else
                 {
-                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key} — sending UpdateStatRPC to {playerName}");
+                    SharedUpgradesPlus.LogVerbose($"[LateJoin]   {kvp.Key}: sending UpdateStatRPC to {playerName}");
                     photonView.RPC("UpdateStatRPC", RpcTarget.All, kvp.Key, steamID, value);
                 }
 
@@ -94,7 +94,7 @@ namespace SharedUpgradesPlus.Services
                 sent++;
             }
 
-            SharedUpgradesPlus.LogAlways($"[LateJoin] done — {playerName}: sent={sent}, skipped={skipped}");
+            SharedUpgradesPlus.LogAlways($"[LateJoin] done {playerName}: sent={sent}, skipped={skipped}");
         }
 
         private static int SimulateRealisticLevelling(int value)
@@ -109,7 +109,7 @@ namespace SharedUpgradesPlus.Services
                     simulatedValue++;
             }
 
-            SharedUpgradesPlus.LogVerbose($"[LateJoin] roll simulation — input={value}, chance={chance}%, result={simulatedValue}");
+            SharedUpgradesPlus.LogVerbose($"[LateJoin] roll simulation: input={value}, chance={chance}%, result={simulatedValue}");
             return simulatedValue;
         }
     }

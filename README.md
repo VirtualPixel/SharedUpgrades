@@ -2,20 +2,20 @@
 
 Share upgrades with your whole team in R.E.P.O.
 
-**HOST ONLY** — only the host needs this installed. Your friends play completely vanilla.
+**HOST ONLY.** Only the host needs this installed. Your friends play completely vanilla.
 
-> **v1.4.1 — modded upgrade discovery fix.** Modded upgrades weren't being detected on R.E.P.O. v0.4 so sharing them silently did nothing. Now they are, and combined with 1.4.0's level-snap fix, modded sharing works the same as vanilla.
+> **v1.4.2: quieter startup.** Fixes a HarmonyX warning that fired on every cold start while looking up REPOLib's modded upgrade list. The lookup already handled the miss; the warning just polluted the log.
 
 ---
 
 ## Features
 
-- **Chance-based sharing** — set a % chance that each upgrade gets shared. 100% for full team sharing, lower if you want it to feel earned
-- **Shared Upgrade Limiting** — Set a total number of times individual upgrades can be distributed while not limiting how high one person can take a stat 
-- **Per-upgrade toggle** — enable or disable sharing individually for each upgrade type directly in the config file
-- **Late join sync** — players joining mid-run or between runs (with ReturnToLobby) receive the team's upgrades automatically
-- **Vanilla + modded upgrade support** — works with MoreUpgrades and other upgrade mods out of the box
-- **Auto-discovery** — detects new upgrades automatically, won't break when R.E.P.O. updates
+- **Chance-based sharing.** Set a % chance that each upgrade level gets shared. 100% for full team sharing, lower if you want it to feel earned.
+- **Shared upgrade limiting.** Cap how many times a given upgrade type can be redistributed to the team without limiting how high any one person can take it.
+- **Per-upgrade toggle.** Enable or disable sharing individually for each upgrade type in the config file.
+- **Late join sync.** Players joining mid-run or between runs (with ReturnToLobby) receive the team's upgrades automatically.
+- **Vanilla and modded upgrade support.** Works with MoreUpgrades and other upgrade mods out of the box.
+- **Auto-discovery.** Picks up new upgrades automatically, won't break when R.E.P.O. ships new ones.
 
 ## Config
 
@@ -51,7 +51,7 @@ Mods like [SharedUpgrades](https://thunderstore.io/c/repo/p/Traktool/SharedUpgra
 
 ## Maintenance
 
-SharedUpgradesPlus is feature complete. No active development planned — but if you run into a bug or have a reasonable feature request, open an issue on GitHub and I'll take a look.
+SharedUpgradesPlus is feature complete as far as I'm concerned. I'm not planning new features but I'll keep it maintained, so if you run into a bug or have a feature idea that makes sense, open an issue on GitHub and I'll take a look.
 
 ---
 

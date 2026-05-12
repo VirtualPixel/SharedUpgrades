@@ -10,6 +10,13 @@ namespace SharedUpgradesPlus.Services
     // need a compile-time reference to REPOLib. Returns empty if it isn't loaded.
     internal static class RepoLibInterop
     {
+        // Vanilla BindingFlags lookup so the resolve step doesn't emit
+        // HarmonyX "Could not find property" warnings at startup when the
+        // shape we're looking for moves between REPOLib versions.
+        private const BindingFlags MemberFlags =
+            BindingFlags.Public | BindingFlags.NonPublic |
+            BindingFlags.Instance | BindingFlags.Static;
+
         private static bool _resolved;
         private static PropertyInfo? _playerUpgradesProp;
         private static PropertyInfo? _upgradeIdProp;
@@ -45,13 +52,13 @@ namespace SharedUpgradesPlus.Services
             var upgradesType = AccessTools.TypeByName("REPOLib.Modules.Upgrades");
             if (upgradesType == null) return false;
 
-            _playerUpgradesProp = AccessTools.Property(upgradesType, "PlayerUpgrades");
+            _playerUpgradesProp = upgradesType.GetProperty("PlayerUpgrades", MemberFlags);
             if (_playerUpgradesProp == null) return false;
 
             var playerUpgradeType = AccessTools.TypeByName("REPOLib.Modules.PlayerUpgrade");
             if (playerUpgradeType == null) return false;
 
-            _upgradeIdProp = AccessTools.Property(playerUpgradeType, "UpgradeId");
+            _upgradeIdProp = playerUpgradeType.GetProperty("UpgradeId", MemberFlags);
             return _upgradeIdProp != null;
         }
     }

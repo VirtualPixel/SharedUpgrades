@@ -1,6 +1,13 @@
+## 1.4.2
+
+- **Fixed:** Quieter startup. `RepoLibInterop` was using `HarmonyLib.AccessTools.Property` to look up REPOLib's `PlayerUpgrade.UpgradeId` and the lookup failing (which the surrounding code already handles) was making HarmonyX log a `Could not find property` warning on every cold start. Switched to vanilla `Type.GetProperty` with explicit `BindingFlags` so the lookup is silent.
+- **Changed:** README and CHANGELOG cleaned up. No code behavior change.
+
+---
+
 ## 1.4.1
 
-- **Fixed:** Modded upgrades weren't being detected on R.E.P.O. v0.4 — the mod thought there were zero modded upgrades to share, so things like MoreUpgrades' Sprint Usage or Map Zoom silently never distributed. Discovery now picks them up correctly, and also reads REPOLib's API directly as a backup in case the key prefix changes again the way MoreUpgrades 1.6.7 did.
+- **Fixed:** Modded upgrades weren't being detected on R.E.P.O. v0.4. The mod thought there were zero modded upgrades to share, so things like MoreUpgrades' Sprint Usage or Map Zoom silently never distributed. Discovery now picks them up correctly, and also reads REPOLib's API directly as a backup in case the key prefix changes again the way MoreUpgrades 1.6.7 did.
 
 ---
 
@@ -12,7 +19,7 @@
 
 ## 1.3.3
 
-- **Updated:** Rebuilt for R.E.P.O. v0.4. 1.3.2 will not load on v0.4 — the stats container changed type internally (`Dictionary` → `SortedDictionary`), which is a binary break even though the mod's source did not need to change
+- **Updated:** Rebuilt for R.E.P.O. v0.4. 1.3.2 will not load on v0.4. The stats container changed type internally (`Dictionary` to `SortedDictionary`), which is a binary break even though the mod's source did not need to change
 - **Note:** v0.4 adds an in-world UpgradeStand kiosk and an auto-strip rule for stat keys prefixed `playerUpgrade*`. If upgrades disappear or stand purchases don't sync, open an issue with your config and BepInEx log
 
 ---
@@ -26,14 +33,14 @@
 
 ## 1.3.1
 
-- **Fixed:** Late join sync could give the joining player more upgrades than teammates had — caused by the joining player's own save data inflating the team snapshot and a race condition with the game's stat initialization
+- **Fixed:** Late join sync could give the joining player more upgrades than teammates had. Caused by the joining player's own save data inflating the team snapshot and a race condition with the game's stat initialization
 - **Added:** Extensive logging, along with a toggle to increase or decrease logging
 
 ---
 
 ## 1.3.0
 
-- **Changed:** Late join sync now simulates per-level chance rather than a single all-or-nothing roll — late joiners receive a realistic spread instead of full upgrades or none
+- **Changed:** Late join sync now simulates per-level chance rather than a single all-or-nothing roll. Late joiners receive a realistic spread instead of full upgrades or none
 - **Changed:** `LateJoinSyncChance` removed; `SharedUpgradesChance` now applies to both real-time sharing and late join sync
 - **Changed:** Config sections consolidated into General and Effects for cleaner layout
 - **Changed:** Updated README to be more consistent with naming - SharedUpgradesPlus
@@ -110,7 +117,7 @@
 
 ## 1.1.0
 
-- **New:** Per-upgrade toggle — enable or disable sharing per upgrade type in the config file
+- **New:** Per-upgrade toggle, enable or disable sharing per upgrade type in the config file
 
 ---
 

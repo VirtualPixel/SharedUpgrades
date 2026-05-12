@@ -72,7 +72,7 @@ namespace SharedUpgradesPlus.Patches
                 kvp.Value.TryGetValue(__state.SteamID, out int currentValue);
                 __state.LevelsBefore.TryGetValue(kvp.Key, out int previousValue);
 
-                SharedUpgradesPlus.LogVerbose($"[Purchase]   {kvp.Key}: {previousValue} → {currentValue}");
+                SharedUpgradesPlus.LogVerbose($"[Purchase]   {kvp.Key}: {previousValue} -> {currentValue}");
 
                 if (currentValue <= previousValue) continue;
                 int difference = currentValue - previousValue;
@@ -91,7 +91,7 @@ namespace SharedUpgradesPlus.Patches
             // Match the item name against registered modded upgrades to identify the purchase
             if (!distributed && __state.ItemName != null && ConfigService.IsModdedUpgradesEnabled())
             {
-                SharedUpgradesPlus.LogVerbose($"[Purchase] no vanilla upgrades changed — checking modded match for '{__state.ItemName}'");
+                SharedUpgradesPlus.LogVerbose($"[Purchase] no vanilla upgrades changed, checking modded match for '{__state.ItemName}'");
 
                 string? matchedKey = MatchItemNameToModdedUpgrade(__state.ItemName);
                 if (matchedKey != null)

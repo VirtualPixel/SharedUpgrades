@@ -15,7 +15,7 @@ namespace SharedUpgradesPlus.Patches
 
             if (playerAvatar == null)
             {
-                SharedUpgradesPlus.Logger.LogError($"[Effects] TesterUpgradeCommandRPC fired for {_steamID} but no PlayerAvatar found — skipping effects.");
+                SharedUpgradesPlus.Logger.LogError($"[Effects] TesterUpgradeCommandRPC fired for {_steamID} but no PlayerAvatar found, skipping effects.");
                 return;
             }
 
@@ -25,14 +25,14 @@ namespace SharedUpgradesPlus.Patches
             {
                 if (playerAvatar.isLocal)
                 {
-                    SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} is local — StatsUI + CameraGlitch.");
+                    SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} is local, StatsUI + CameraGlitch.");
                     StatsUI.instance.Fetch();
                     StatsUI.instance.ShowStats();
                     CameraGlitch.Instance.PlayUpgrade();
                 }
                 else
                 {
-                    SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} is remote — camera shake.");
+                    SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} is remote, camera shake.");
                     GameDirector.instance.CameraImpact.ShakeDistance(5f, 1f, 6f, playerAvatar.transform.position, 0.2f);
                 }
 
@@ -51,7 +51,7 @@ namespace SharedUpgradesPlus.Patches
                 && ConfigService.IsSharedUpgradeHealEnabled())
             {
                 int difference = playerAvatar.playerHealth.maxHealth + (20 * upgradeNum) - playerAvatar.playerHealth.health;
-                SharedUpgradesPlus.LogVerbose($"[Effects] healing {playerAvatar.playerName} — max={playerAvatar.playerHealth.maxHealth}, current={playerAvatar.playerHealth.health}, healing={difference}");
+                SharedUpgradesPlus.LogVerbose($"[Effects] healing {playerAvatar.playerName}: max={playerAvatar.playerHealth.maxHealth}, current={playerAvatar.playerHealth.health}, healing={difference}");
 
                 if (difference > 0)
                     playerAvatar.playerHealth.HealOther(difference, false);

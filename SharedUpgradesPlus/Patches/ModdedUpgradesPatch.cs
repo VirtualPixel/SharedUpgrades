@@ -32,7 +32,7 @@ namespace SharedUpgradesPlus.Patches
             PlayerAvatar player = SemiFunc.PlayerAvatarGetFromSteamID(key);
             int difference = value - __state;
 
-            SharedUpgradesPlus.LogVerbose($"[ModdedPatch] {dictionaryName} ({key}) — {__state} → {value} (+{difference}), player={player?.playerName ?? "not found"}, distributing={DistributionService.IsDistributing}");
+            SharedUpgradesPlus.LogVerbose($"[ModdedPatch] {dictionaryName} ({key}): {__state} -> {value} (+{difference}), player={player?.playerName ?? "not found"}, distributing={DistributionService.IsDistributing}");
 
             // Visual effects (all clients)
             if (player != null && ConfigService.IsShareNotificationEnabled())
@@ -75,7 +75,7 @@ namespace SharedUpgradesPlus.Patches
             }
 
             string playerName = player.playerName;
-            SharedUpgradesPlus.LogAlways($"[ModdedPatch] {playerName} bought {dictionaryName}: {__state} → {value} (+{difference}), distributing...");
+            SharedUpgradesPlus.LogAlways($"[ModdedPatch] {playerName} bought {dictionaryName}: {__state} -> {value} (+{difference}), distributing...");
 
             var context = new UpgradeContext(
                 steamID: key,

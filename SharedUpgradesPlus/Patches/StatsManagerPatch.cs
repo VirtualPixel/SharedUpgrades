@@ -12,7 +12,7 @@ namespace SharedUpgradesPlus.Patches
         [HarmonyPostfix]
         public static void Postfix(StatsManager __instance)
         {
-            SharedUpgradesPlus.LogVerbose("StatsManager.Start — initial discovery.");
+            SharedUpgradesPlus.LogVerbose("StatsManager.Start: initial discovery.");
             RefreshRegistry(__instance);
 
             if (_callbackService == null)
@@ -49,7 +49,7 @@ namespace SharedUpgradesPlus.Patches
         [HarmonyPostfix]
         public static void Postfix(StatsManager __instance)
         {
-            SharedUpgradesPlus.LogVerbose("StatsManager.RunStartStats — re-discovering after REPOLib.");
+            SharedUpgradesPlus.LogVerbose("StatsManager.RunStartStats: re-discovering after REPOLib.");
             StatsManagerPatch.RefreshRegistry(__instance);
         }
     }
@@ -62,7 +62,7 @@ namespace SharedUpgradesPlus.Patches
         [HarmonyPostfix]
         public static void Postfix(StatsManager __instance)
         {
-            SharedUpgradesPlus.LogVerbose("StatsManager.LoadGame — re-discovering after save load.");
+            SharedUpgradesPlus.LogVerbose("StatsManager.LoadGame: re-discovering after save load.");
             StatsManagerPatch.RefreshRegistry(__instance);
         }
     }

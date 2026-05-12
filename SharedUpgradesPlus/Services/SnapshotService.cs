@@ -14,7 +14,7 @@ namespace SharedUpgradesPlus.Services
                 .Where(kvp => RegistryService.Instance.IsRegistered(kvp.Key))
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.GetValueOrDefault(steamID, 0));
 
-            SharedUpgradesPlus.LogVerbose($"[Snapshot] Player snapshot for {steamID} — {result.Count} upgrade(s).");
+            SharedUpgradesPlus.LogVerbose($"[Snapshot] Player snapshot for {steamID}: {result.Count} upgrade(s).");
             return result;
         }
 
@@ -32,7 +32,7 @@ namespace SharedUpgradesPlus.Services
                 result[kvp.Key] = values.DefaultIfEmpty(0).Max();
             }
 
-            SharedUpgradesPlus.LogVerbose($"[Snapshot] Team snapshot (exclude={excludeSteamID ?? "none"}) — {result.Count} upgrade(s).");
+            SharedUpgradesPlus.LogVerbose($"[Snapshot] Team snapshot (exclude={excludeSteamID ?? "none"}): {result.Count} upgrade(s).");
             return result;
         }
     }

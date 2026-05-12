@@ -36,7 +36,7 @@ namespace SharedUpgradesPlus.Services
             var allPlayers = SemiFunc.PlayerGetAll();
             int chance = ConfigService.SharedUpgradesChancePercentage();
 
-            SharedUpgradesPlus.LogVerbose($"[Distribute] {upgradeKey} (+{difference}) — {allPlayers.Count} player(s), limit={upgradeLimit}, chance={chance}%");
+            SharedUpgradesPlus.LogVerbose($"[Distribute] {upgradeKey} (+{difference}): {allPlayers.Count} player(s), limit={upgradeLimit}, chance={chance}%");
 
             IsDistributing = true;
             int sent = 0;
@@ -56,7 +56,7 @@ namespace SharedUpgradesPlus.Services
                     if (StatsManager.instance.dictionaryOfDictionaries.TryGetValue(upgradeKey, out var upgradeDict))
                         upgradeDict.TryGetValue(steamID, out playerLevel);
 
-                    SharedUpgradesPlus.LogVerbose($"[Distribute]   {player.playerName} — level={playerLevel}, limit={upgradeLimit}");
+                    SharedUpgradesPlus.LogVerbose($"[Distribute]   {player.playerName}: level={playerLevel}, limit={upgradeLimit}");
 
                     if (upgradeLimit > 0 && upgradeLimit <= playerLevel)
                     {
@@ -73,7 +73,7 @@ namespace SharedUpgradesPlus.Services
                     }
 
                     int newLevel = playerLevel + difference;
-                    SharedUpgradesPlus.LogAlways($"[Distribute]   {player.playerName}: {playerLevel} → {newLevel} (+{difference})");
+                    SharedUpgradesPlus.LogAlways($"[Distribute]   {player.playerName}: {playerLevel} -> {newLevel} (+{difference})");
 
                     if (isVanilla)
                     {
@@ -81,7 +81,7 @@ namespace SharedUpgradesPlus.Services
                     }
                     else
                     {
-                        // Send the teammate's new total, not the host's — otherwise teammates snap to host's level.
+                        // Send the teammate's new total, not the host's, otherwise teammates snap to host's level.
                         photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, newLevel);
                     }
 
@@ -97,7 +97,7 @@ namespace SharedUpgradesPlus.Services
                 IsDistributing = false;
             }
 
-            SharedUpgradesPlus.LogVerbose($"[Distribute] done — {upgradeKey}: sent={sent}, skipped={skipped}");
+            SharedUpgradesPlus.LogVerbose($"[Distribute] done {upgradeKey}: sent={sent}, skipped={skipped}");
 
             // Only buyer should get the heal, not everyone getting distributed to
             HealBuyer(context, upgradeKey, difference);
@@ -112,7 +112,7 @@ namespace SharedUpgradesPlus.Services
             if (buyer == null) return;
 
             int healDiff = buyer.playerHealth.maxHealth + (20 * difference) - buyer.playerHealth.health;
-            SharedUpgradesPlus.LogVerbose($"[Distribute] healing {context.PlayerName} — max={buyer.playerHealth.maxHealth}, current={buyer.playerHealth.health}, healing={healDiff}");
+            SharedUpgradesPlus.LogVerbose($"[Distribute] healing {context.PlayerName}: max={buyer.playerHealth.maxHealth}, current={buyer.playerHealth.health}, healing={healDiff}");
 
             if (healDiff > 0)
                 buyer.playerHealth.HealOther(healDiff, false);

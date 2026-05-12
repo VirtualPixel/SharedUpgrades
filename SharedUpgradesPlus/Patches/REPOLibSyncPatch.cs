@@ -37,7 +37,7 @@ namespace SharedUpgradesPlus.Patches
                 synced++;
             }
 
-            SharedUpgradesPlus.LogVerbose($"REPOLib sync done — {synced}/{playerUpgrades.Count} upgrade(s).");
+            SharedUpgradesPlus.LogVerbose($"REPOLib sync done: {synced}/{playerUpgrades.Count} upgrade(s).");
         }
     }
 }
