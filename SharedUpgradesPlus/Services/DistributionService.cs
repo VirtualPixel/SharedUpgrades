@@ -6,7 +6,13 @@ namespace SharedUpgradesPlus.Services
 {
     public static class DistributionService
     {
-        public static bool IsDistributing { get; private set; }
+        // Counter rather than bool so SyncService and DistributeUpgrade can each
+        // bracket their own work without one stomping the other's flag.
+        private static int _distributingDepth;
+        public static bool IsDistributing => _distributingDepth > 0;
+
+        internal static void EnterDistributing() => _distributingDepth++;
+        internal static void ExitDistributing() => _distributingDepth = Math.Max(0, _distributingDepth - 1);
 
         public static void DistributeUpgrade(UpgradeContext context, string upgradeKey, int difference)
         {
@@ -38,7 +44,7 @@ namespace SharedUpgradesPlus.Services
 
             SharedUpgradesPlus.LogVerbose($"[Distribute] {upgradeKey} (+{difference}): {allPlayers.Count} player(s), limit={upgradeLimit}, chance={chance}%");
 
-            IsDistributing = true;
+            EnterDistributing();
             int sent = 0;
             int skipped = 0;
 
@@ -79,9 +85,14 @@ namespace SharedUpgradesPlus.Services
                     {
                         photonView.RPC("TesterUpgradeCommandRPC", RpcTarget.All, steamID, upgradeSuffix, difference);
                     }
-                    else
+                    else if (!RepoLibInterop.TrySetLevel(upgradeKey, steamID, newLevel))
                     {
-                        // Send the teammate's new total, not the host's, otherwise teammates snap to host's level.
+                        // SetLevel writes the dict, runs the upgrade action on this client,
+                        // and broadcasts to the rest of the room via REPOLib's NetworkedEvent.
+                        // If REPOLib isn't loaded or the upgrade isn't registered, fall back
+                        // to UpdateStatRPC so at least the level moves - the recipient won't
+                        // get the action invoked but the team max stays in sync.
+                        SharedUpgradesPlus.Logger.LogWarning($"[Distribute]   {upgradeKey}: SetLevel failed for {player.playerName}, falling back to UpdateStatRPC.");
                         photonView.RPC("UpdateStatRPC", RpcTarget.All, upgradeKey, steamID, newLevel);
                     }
 
@@ -94,7 +105,7 @@ namespace SharedUpgradesPlus.Services
             }
             finally
             {
-                IsDistributing = false;
+                ExitDistributing();
             }
 
             SharedUpgradesPlus.LogVerbose($"[Distribute] done {upgradeKey}: sent={sent}, skipped={skipped}");

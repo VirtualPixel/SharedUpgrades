@@ -1,3 +1,11 @@
+## 1.4.3
+
+- **Fixed:** Modded upgrades from MoreUpgrades 1.6.9, and anything else on REPOLib 4.x, stopped being shared. REPOLib 4.0 moved upgrade sync off `PunManager.UpdateStatRPC` onto its own `NetworkedEvent`, so the old `UpdateStatRPC` postfix never fired. Detection now hooks `PlayerUpgrade.SetLevel` and `ApplyUpgrade` reflectively, which catches the new path on the host and every other client.
+- **Fixed:** Even when modded upgrades *were* getting through, distribution went via `UpdateStatRPC` which moves the level number but doesn't invoke the upgrade's action. A shared Sprint Usage would show up in the recipient's stats panel but their stamina drain wouldn't change. Distribution now goes through REPOLib's own `SetLevel`, which writes the level and runs the action on the recipient.
+- **Fixed:** Late-join sync no longer re-distributes the joining player's synced upgrades back to everyone else. The host's late-join write path now brackets itself with the same re-entry guard the real-time path uses.
+
+---
+
 ## 1.4.2
 
 - **Fixed:** Quieter startup. `RepoLibInterop` was using `HarmonyLib.AccessTools.Property` to look up REPOLib's `PlayerUpgrade.UpgradeId` and the lookup failing (which the surrounding code already handles) was making HarmonyX log a `Could not find property` warning on every cold start. Switched to vanilla `Type.GetProperty` with explicit `BindingFlags` so the lookup is silent.

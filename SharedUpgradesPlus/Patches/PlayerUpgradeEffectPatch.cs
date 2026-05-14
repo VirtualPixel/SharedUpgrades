@@ -22,28 +22,7 @@ namespace SharedUpgradesPlus.Patches
             SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} got {upgradeName} x{upgradeNum} (local={playerAvatar.isLocal})");
 
             if (ConfigService.IsShareNotificationEnabled())
-            {
-                if (playerAvatar.isLocal)
-                {
-                    SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} is local, StatsUI + CameraGlitch.");
-                    StatsUI.instance.Fetch();
-                    StatsUI.instance.ShowStats();
-                    CameraGlitch.Instance.PlayUpgrade();
-                }
-                else
-                {
-                    SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} is remote, camera shake.");
-                    GameDirector.instance.CameraImpact.ShakeDistance(5f, 1f, 6f, playerAvatar.transform.position, 0.2f);
-                }
-
-                if (!GameManager.Multiplayer() || PhotonNetwork.IsMasterClient)
-                {
-                    SharedUpgradesPlus.LogVerbose($"[Effects] applying upgrade material effect to {playerAvatar.playerName}.");
-                    playerAvatar.playerHealth.MaterialEffectOverride(PlayerHealth.Effect.Upgrade);
-                }
-            }
-
-            SharedUpgradesPlus.LogVerbose($"[Effects] {playerAvatar.playerName} effects done.");
+                EffectsService.PlayShareEffect(playerAvatar);
 
             // Heal the recipient of a shared health upgrade to match their new max health
             if (isHealth

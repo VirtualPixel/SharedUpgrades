@@ -4,7 +4,7 @@ Share upgrades with your whole team in R.E.P.O.
 
 **HOST ONLY.** Only the host needs this installed. Your friends play completely vanilla.
 
-> **v1.4.2: quieter startup.** Fixes a HarmonyX warning that fired on every cold start while looking up REPOLib's modded upgrade list. The lookup already handled the miss; the warning just polluted the log.
+> **Heads up:** REPOLib 4.0 moved upgrade sync onto a private NetworkedEvent and the old detection patch stopped firing, so earlier builds silently stopped sharing modded upgrades. Fixed in this release.
 
 ---
 

@@ -2,7 +2,10 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using SharedUpgradesPlus.Configuration;
+using SharedUpgradesPlus.Patches;
 using SharedUpgradesPlus.Services;
+using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace SharedUpgradesPlus
@@ -49,6 +52,40 @@ namespace SharedUpgradesPlus
         {
             Harmony ??= new Harmony(Info.Metadata.GUID);
             Harmony.PatchAll();
+            PatchRepoLib();
+        }
+
+        // REPOLib's PlayerUpgrade lives in another assembly we don't reference at
+        // compile time, so we resolve the targets reflectively and register with
+        // Harmony's manual API. If REPOLib isn't installed everything below
+        // resolves to null and we just skip; the mod still works for vanilla.
+        private void PatchRepoLib()
+        {
+            MethodInfo? setLevel = RepoLibInterop.SetLevelMethod;
+            MethodInfo? applyUpgrade = RepoLibInterop.ApplyUpgradeMethod;
+            if (setLevel == null || applyUpgrade == null)
+            {
+                Logger.LogInfo("REPOLib not detected; skipping modded upgrade patches.");
+                return;
+            }
+
+            Harmony!.Patch(setLevel,
+                prefix: HarmonyMethodFor(nameof(PlayerUpgradePatches.SetLevelPrefix)),
+                postfix: HarmonyMethodFor(nameof(PlayerUpgradePatches.SetLevelPostfix)));
+
+            Harmony!.Patch(applyUpgrade,
+                prefix: HarmonyMethodFor(nameof(PlayerUpgradePatches.ApplyUpgradePrefix)),
+                postfix: HarmonyMethodFor(nameof(PlayerUpgradePatches.ApplyUpgradePostfix)));
+
+            Logger.LogInfo("Patched REPOLib PlayerUpgrade.SetLevel and ApplyUpgrade.");
+        }
+
+        private static HarmonyMethod HarmonyMethodFor(string name)
+        {
+            MethodInfo method = typeof(PlayerUpgradePatches).GetMethod(
+                name, BindingFlags.Static | BindingFlags.Public)
+                ?? throw new MissingMethodException(typeof(PlayerUpgradePatches).FullName, name);
+            return new HarmonyMethod(method);
         }
     }
 }
